@@ -1,0 +1,1 @@
+1st make mock up of UI design include screen and button somewhere out of the way to run (perhaps to stop, pause, or reset too?)
