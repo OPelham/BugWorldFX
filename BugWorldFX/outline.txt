@@ -1,1 +1,12 @@
 1st make mock up of UI design include screen and button somewhere out of the way to run (perhaps to stop, pause, or reset too?)
+
+initial screen with selection of new game or view past world metrics
+
+3 scenes in total (potentially a forth on selection of terminaltion which shows metrics from that simulation)
+
+Scenes
+	-opening menu screen
+		-simulation screen
+			-End of simulation summary screen
+		-past metrics screen
+		
