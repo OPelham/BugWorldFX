@@ -26,8 +26,8 @@ import javafx.util.Duration;
 public class UI extends Application {
 
 	// fields
-	private int windowWidth = 400;
-	private int windowHeight = 400;
+	private int windowWidth = 500;
+	private int windowHeight = 800;
 	private final ArrayList<Bug> circleList = new ArrayList<>();
 	// float x = 100, y = 100, dx = -1.5f, dy = -1.5f;
 
