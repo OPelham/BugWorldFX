@@ -4,14 +4,12 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
 
-public class Plant extends Circle{
+public class Obstacle extends Circle{
 	//fields
-	private int size;
 	
-	public Plant() {
+	public Obstacle() {
 		super(10);
-		this.size = (int)(Math.random()*10+1);
-		this.setFill(Color.LAWNGREEN);
+		this.setFill(Color.GREY);
 		this.setTranslateX(Math.random()* 1200 );
 		this.setTranslateY(Math.random()* 800 );
 	}

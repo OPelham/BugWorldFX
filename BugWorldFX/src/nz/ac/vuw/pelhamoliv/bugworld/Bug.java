@@ -19,9 +19,14 @@ public class Bug extends Circle {
 	public Bug(Stage primaryStage) {
 		super(5);
 		this.maxSpeed = 4.0f;
-		this.setCenterX((float) (Math.random()*250+50));
-		this.setCenterY((float) (Math.random()*250+50));
 		this.primaryStage = primaryStage;
+		this.setTranslateX(Math.random()* 1200 );
+		this.setTranslateY(Math.random()* 800 );
+//		
+//		this.setCenterX((float) (Math.random()*primaryStage.getMaxWidth()-18));
+//		this.setCenterY((float) (Math.random()*primaryStage.getMaxHeight()-45));
+		
+		
 		///the following randominses initial direction
 		double randx = Math.random()*2;
 		double randy = Math.random()*2;
@@ -85,13 +90,13 @@ public class Bug extends Circle {
 			this.setTranslateY(1 + this.getRadius() - this.getCenterY()); //sets CenterX position to radius +1
 		}
 		//if outside bottom bound move to closest y pos which is valid
-		if (this.getCenterY() + this.getTranslateY() - this.getRadius() > (primaryStage.getHeight()-18)) {
-			this.setTranslateY((primaryStage.getHeight()-45)-1 - this.getRadius() - this.getCenterY());
+		if (this.getCenterY() + this.getTranslateY() + this.getRadius() > (primaryStage.getHeight()-45)) {
+			this.setTranslateY((primaryStage.getHeight()-45) - this.getRadius() - this.getCenterY());
 		}
 		
 	}
 
-	//updatemehtof
+	//updatmethod
 	public void update() {
 		moveRandomly();
 		
