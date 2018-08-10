@@ -17,7 +17,7 @@ public class Bug extends Circle {
 	
 	//constructor
 	public Bug(Stage primaryStage) {
-		super(5);
+		super(4);
 		this.maxSpeed = 4.0f;
 		this.primaryStage = primaryStage;
 		this.setTranslateX(Math.random()* 1200 );
