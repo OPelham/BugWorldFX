@@ -4,11 +4,11 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
 
-public class Obstacle extends Circle{
+public class Obstacle extends WorldObject{
 	//fields
 	
 	public Obstacle() {
-		super(10);
+		super(30);
 		this.setFill(Color.GREY);
 		this.setTranslateX(Math.random()* 1200 );
 		this.setTranslateY(Math.random()* 800 );

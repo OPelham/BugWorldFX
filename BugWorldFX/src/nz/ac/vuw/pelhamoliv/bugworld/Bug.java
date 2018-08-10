@@ -1,20 +1,21 @@
 package nz.ac.vuw.pelhamoliv.bugworld;
 
-import javafx.scene.shape.Circle;
+import java.util.ArrayList;
+
 import javafx.stage.Stage;
 
-public class Bug extends Circle {
+public class Bug extends WorldObject {
 	//fields
 	private Stage primaryStage;
 	private float maxSpeed;
-	
-	
-//	float x = (float) (Math.random()*200+1);
-//	float y = (float) (Math.random()*200+1);
-	
+
+
+	//	float x = (float) (Math.random()*200+1);
+	//	float y = (float) (Math.random()*200+1);
+
 	private float dx = -3.5f; 
 	private float dy = -3.5f;
-	
+
 	//constructor
 	public Bug(Stage primaryStage) {
 		super(4);
@@ -22,11 +23,11 @@ public class Bug extends Circle {
 		this.primaryStage = primaryStage;
 		this.setTranslateX(Math.random()* 1200 );
 		this.setTranslateY(Math.random()* 800 );
-//		
-//		this.setCenterX((float) (Math.random()*primaryStage.getMaxWidth()-18));
-//		this.setCenterY((float) (Math.random()*primaryStage.getMaxHeight()-45));
-		
-		
+		//		
+		//		this.setCenterX((float) (Math.random()*primaryStage.getMaxWidth()-18));
+		//		this.setCenterY((float) (Math.random()*primaryStage.getMaxHeight()-45));
+
+
 		///the following randominses initial direction
 		double randx = Math.random()*2;
 		double randy = Math.random()*2;
@@ -36,22 +37,22 @@ public class Bug extends Circle {
 		if (randy >1) {
 			this.dy = -dy;
 		}
-		
+
 	}
-	
+
 	//a class to choose direction to take
 	public void navigation() {
-		
+
 	}
-	
-	
+
+
 	//a class to move bug randomly (direction and speed)
 	//there will be a one in 10 chance of changeing direction for each of y and x directions
-	public void moveRandomly() {
-		double randx = Math.random()*30;
-		double randy = Math.random()*25;
+	public void moveRandomly(ArrayList<WorldObject> allObjectList) {
+		double randx = Math.random()*40;
+		double randy = Math.random()*40;
 		double randSpeed = Math.random()*10;
-		
+
 		//direction change
 		if (randx < 1) {
 			this.dx = -dx;
@@ -71,8 +72,17 @@ public class Bug extends Circle {
 		if (this.dy > maxSpeed) {
 			this.dy = maxSpeed;
 		}
+
+		//movement
+		//first check if collision on move if none move
+		double potnX = this.getTranslateX() + dx;
+		double potnY = this.getTranslateY() + dy;
+		if(!(this.checkCollisions( potnX, potnY, allObjectList))) {
+			this.setTranslateX(this.getTranslateX() + dx);
+			this.setTranslateY(this.getTranslateY() + dy);
+		}
 	}
-	
+
 	//a method to check if the bug is within bounds -- 
 	public void checkInBounds() {
 		//four checks of >= border (dont forget radius) l/r/t/b then move to be inside
@@ -93,27 +103,30 @@ public class Bug extends Circle {
 		if (this.getCenterY() + this.getTranslateY() + this.getRadius() > (primaryStage.getHeight()-45)) {
 			this.setTranslateY((primaryStage.getHeight()-45) - this.getRadius() - this.getCenterY());
 		}
-		
+
 	}
 
-	//updatmethod
-	public void update() {
-		moveRandomly();
-		
+	public void rebound() {
 		if(this.getCenterX() + this.getTranslateX() <= this.getRadius() || 		//if the radius moves beyond left boundary
 				this.getCenterX() + this.getTranslateX() + this.getRadius() >= primaryStage.getWidth()-18) {	//if the radius moves beyond right boundary
 			dx = - dx;
 		}
 		//this part identifies movement will take them outside boundry right boundry, if so move left
-		
+
 
 		if(this.getCenterY() + this.getTranslateY() <= this.getRadius() ||			//if the radius moves beyond top boundary
 				this.getCenterY() + this.getTranslateY() + this.getRadius() >= primaryStage.getHeight()-45) {	//if the radius moves beyond bottom boundary
 			dy = - dy;
 		}
+	}
 
-		this.setTranslateX(this.getTranslateX() + dx);
-		this.setTranslateY(this.getTranslateY() + dy);
+	//updatmethod
+	public void update(ArrayList<WorldObject> allObjectList) {
+		moveRandomly(allObjectList);
+		//		rebound();
+		//here check if new move would be valid if it is then make move
+
+
 		checkInBounds();
 	}
 }

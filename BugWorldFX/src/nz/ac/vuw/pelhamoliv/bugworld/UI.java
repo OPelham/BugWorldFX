@@ -14,6 +14,7 @@ import javafx.scene.Scene;
 import javafx.scene.chart.PieChart;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
@@ -30,7 +31,8 @@ public class UI extends Application {
 	// fields
 	private int windowWidth = 1200;
 	private int windowHeight = 800;
-	//make a universal arraylist of circe class?
+	// make a universal arraylist of circe class?
+	private final ArrayList<WorldObject> allObjectList = new ArrayList<>();
 	private final ArrayList<Plant> plantList = new ArrayList<>();
 	private final ArrayList<Bug> bugList = new ArrayList<>();
 	private final ArrayList<Obstacle> obstacleList = new ArrayList<>();
@@ -41,25 +43,27 @@ public class UI extends Application {
 
 		Group root = new Group();
 
-		//add bugs to arraylist
+		// add bugs to arraylist
 		for (int i = 0; i < 20; i++) {
 			final Bug b = new Bug(primaryStage);
-			bugList.add(b);
+			// bugList.add(b);
+			allObjectList.add(b);
 			root.getChildren().add(b);
 		}
-		//add plants to arraylist
+		// add plants to arraylist
 		for (int i = 0; i < 10; i++) {
 			final Plant p = new Plant();
-			plantList.add(p);
+			// plantList.add(p);
+			allObjectList.add(p);
 			root.getChildren().add(p);
 		}
-		//add plants to arraylist
+		// add plants to arraylist
 		for (int i = 0; i < 10; i++) {
 			final Obstacle o = new Obstacle();
-			obstacleList.add(o);
+			// obstacleList.add(o);
+			allObjectList.add(o);
 			root.getChildren().add(o);
 		}
-
 
 		Scene scene = new Scene(root, windowWidth, windowHeight);
 		scene.setFill(Color.DARKOLIVEGREEN);
@@ -69,8 +73,12 @@ public class UI extends Application {
 			@Override
 			public void handle(ActionEvent event) {
 
-				for (Bug b : bugList) {
-					b.update();
+				for (WorldObject c : allObjectList) {
+					if (c instanceof Bug) {
+
+						((Bug) c).update(allObjectList);
+					}
+
 				}
 			}
 		});
@@ -83,8 +91,20 @@ public class UI extends Application {
 		primaryStage.setScene(scene);
 		primaryStage.show();
 
-
 	}
+
+	// public boolean checkCollisions(WorldObject c) {
+	//
+	// for (WorldObject d: allObjectList) {
+	// if(c!=d) {
+	// if(c.conductCollision(d)) {
+	// return true;
+	// }
+	// }
+	// }
+	//
+	// return false;
+	// }
 
 	public static void main(String[] args) {
 		launch(args);
