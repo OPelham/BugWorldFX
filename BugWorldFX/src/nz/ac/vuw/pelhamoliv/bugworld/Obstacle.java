@@ -10,8 +10,8 @@ public class Obstacle extends WorldObject{
 	public Obstacle() {
 		super(30);
 		this.setFill(Color.GREY);
-		this.setTranslateX(Math.random()* 1200 );
-		this.setTranslateY(Math.random()* 800 );
+		this.setTranslateX(Math.random()* 1100 + 25 );
+		this.setTranslateY(Math.random()* 720 + 35);
 	}
 
 }

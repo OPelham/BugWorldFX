@@ -12,6 +12,11 @@ import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.chart.PieChart;
+import javafx.scene.control.Button;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
@@ -40,8 +45,8 @@ public class UI extends Application {
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
-
-		Group root = new Group();
+		BorderPane bp = new BorderPane();
+		Pane root = new Pane();
 
 		// add bugs to arraylist
 		for (int i = 0; i < 20; i++) {
@@ -65,20 +70,26 @@ public class UI extends Application {
 			root.getChildren().add(o);
 		}
 
-		Scene scene = new Scene(root, windowWidth, windowHeight);
-		scene.setFill(Color.DARKOLIVEGREEN);
+		HBox hb = new HBox();
+		Button pausePlay = new Button("Pause");
+		Button restart = new Button("Restart");
+		hb.getChildren().add(pausePlay);
+		hb.getChildren().add(restart);
+		hb.setStyle("-fx-background-color: #464646");
+		root.setStyle("-fx-background-color: #558000");
+		bp.setCenter(root);
+		bp.setTop(hb);
+		Scene scene = new Scene(bp, windowWidth, windowHeight);
+//		scene.setFill(Color.DARKOLIVEGREEN);
 
 		KeyFrame frame = new KeyFrame(Duration.millis(16), new EventHandler<ActionEvent>() {
 
 			@Override
 			public void handle(ActionEvent event) {
-
 				for (WorldObject c : allObjectList) {
 					if (c instanceof Bug) {
-
 						((Bug) c).update(allObjectList);
 					}
-
 				}
 			}
 		});
@@ -86,6 +97,20 @@ public class UI extends Application {
 		Timeline timeline = new Timeline(frame);
 		timeline.setCycleCount(javafx.animation.Animation.INDEFINITE);
 		timeline.play();
+		
+		pausePlay.setOnAction(new EventHandler<ActionEvent>() {
+			int i = 0;
+			@Override
+			public void handle(ActionEvent event) {
+				
+				if(i%2 == 0) {
+					timeline.pause();
+				} else {
+					timeline.play();
+				}
+				i++;
+			}
+		});
 
 		primaryStage.setTitle("Bug World FX");
 		primaryStage.setScene(scene);

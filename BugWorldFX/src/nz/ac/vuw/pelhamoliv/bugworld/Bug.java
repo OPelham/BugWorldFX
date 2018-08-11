@@ -115,8 +115,8 @@ public class Bug extends WorldObject {
 			this.setTranslateY(1 + this.getRadius() - this.getCenterY()); //sets CenterX position to radius +1
 		}
 		//if outside bottom bound move to closest y pos which is valid
-		if (this.getCenterY() + this.getTranslateY() + this.getRadius() > (primaryStage.getHeight()-45)) {
-			this.setTranslateY((primaryStage.getHeight()-45) - this.getRadius() - this.getCenterY());
+		if (this.getCenterY() + this.getTranslateY() + this.getRadius() > (primaryStage.getHeight()-65)) {
+			this.setTranslateY((primaryStage.getHeight()-65) - this.getRadius() - this.getCenterY());
 		}
 
 	}
@@ -130,7 +130,7 @@ public class Bug extends WorldObject {
 
 
 		if(this.getCenterY() + this.getTranslateY() <= this.getRadius() ||			//if the radius moves beyond top boundary
-				this.getCenterY() + this.getTranslateY() + this.getRadius() >= primaryStage.getHeight()-45) {	//if the radius moves beyond bottom boundary
+				this.getCenterY() + this.getTranslateY() + this.getRadius() >= primaryStage.getHeight()-65) {	//if the radius moves beyond bottom boundary
 			dy = - dy;
 		}
 	}
