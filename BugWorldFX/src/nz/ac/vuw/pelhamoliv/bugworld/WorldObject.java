@@ -1,10 +1,17 @@
 package nz.ac.vuw.pelhamoliv.bugworld;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.SortedMap;
 
+import javafx.collections.transformation.SortedList;
 import javafx.scene.shape.Circle;
 
 public class WorldObject extends Circle{
+	private List<WorldObject> reachableObjects = new ArrayList<WorldObject>(); //any objects in range
+	//need way of sorting this by distance
+	
 
 	public WorldObject() {
 		super();
@@ -45,10 +52,15 @@ public class WorldObject extends Circle{
 				}
 			}
 		}
-
 		return false;
 	}
 
+	
+	
+	//eat of be eaten
+	public void checkReach() {
+		
+	}
 
 
 }
