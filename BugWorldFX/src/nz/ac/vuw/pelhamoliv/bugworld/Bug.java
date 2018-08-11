@@ -14,10 +14,6 @@ public class Bug extends WorldObject {
 	private List<WorldObject> sensedObjects = new ArrayList<WorldObject>(); //need way to sort
 	//could make sort interface and sort by distance to this object? maybe make it a queue instead?
 
-
-	//	float x = (float) (Math.random()*200+1);
-	//	float y = (float) (Math.random()*200+1);
-
 	private float dx = -3.5f; 
 	private float dy = -3.5f;
 
@@ -28,7 +24,7 @@ public class Bug extends WorldObject {
 		this.primaryStage = primaryStage;
 		this.setTranslateX(Math.random()* 1200 );
 		this.setTranslateY(Math.random()* 800 );
-		this.setSenseRange(300);
+		this.setSenseRange(200);
 		//		
 		//		this.setCenterX((float) (Math.random()*primaryStage.getMaxWidth()-18));
 		//		this.setCenterY((float) (Math.random()*primaryStage.getMaxHeight()-45));
@@ -46,6 +42,33 @@ public class Bug extends WorldObject {
 
 	}
 
+	//Accessor Methods
+
+
+	public float getMaxSpeed() {
+		return maxSpeed;
+	}
+
+	public void setMaxSpeed(float maxSpeed) {
+		this.maxSpeed = maxSpeed;
+	}
+
+	public float getDx() {
+		return dx;
+	}
+
+	public void setDx(float dx) {
+		this.dx = dx;
+	}
+
+	public float getDy() {
+		return dy;
+	}
+
+	public void setDy(float dy) {
+		this.dy = dy;
+	}
+
 	private double getSenseRange() {
 		return senseRange;
 	}
@@ -58,6 +81,14 @@ public class Bug extends WorldObject {
 	//a class to choose direction to take
 	public void navigation() {
 
+	}
+
+	//updatmethod
+	public void update(ArrayList<WorldObject> allObjectList) {
+		sense(allObjectList);
+		decideAction(allObjectList);
+		//		moveRandomly(allObjectList);
+		checkInBounds();
 	}
 
 
@@ -87,15 +118,20 @@ public class Bug extends WorldObject {
 		if (this.dy > maxSpeed) {
 			this.dy = maxSpeed;
 		}
+		
+		moveBug(allObjectList);
+		
+	}
 
+	public void moveBug(ArrayList<WorldObject> allObjectList) {
 		//movement
-		//first check if collision on move if none move
-		double potnX = this.getTranslateX() + dx;
-		double potnY = this.getTranslateY() + dy;
-		if(!(this.checkCollisions( potnX, potnY, allObjectList))) {
-			this.setTranslateX(this.getTranslateX() + dx);
-			this.setTranslateY(this.getTranslateY() + dy);
-		}
+				//first check if collision on move if none move
+				double potnX = this.getTranslateX() + dx;
+				double potnY = this.getTranslateY() + dy;
+				if(!(this.checkCollisions( potnX, potnY, allObjectList))) {
+					this.setTranslateX(this.getTranslateX() + dx);
+					this.setTranslateY(this.getTranslateY() + dy);
+				}
 	}
 
 	//a method to check if the bug is within bounds -- 
@@ -115,8 +151,8 @@ public class Bug extends WorldObject {
 			this.setTranslateY(1 + this.getRadius() - this.getCenterY()); //sets CenterX position to radius +1
 		}
 		//if outside bottom bound move to closest y pos which is valid
-		if (this.getCenterY() + this.getTranslateY() + this.getRadius() > (primaryStage.getHeight()-65)) {
-			this.setTranslateY((primaryStage.getHeight()-65) - this.getRadius() - this.getCenterY());
+		if (this.getCenterY() + this.getTranslateY() + this.getRadius() > (primaryStage.getHeight()-80)) {
+			this.setTranslateY((primaryStage.getHeight()-80) - this.getRadius() - this.getCenterY());
 		}
 
 	}
@@ -130,21 +166,12 @@ public class Bug extends WorldObject {
 
 
 		if(this.getCenterY() + this.getTranslateY() <= this.getRadius() ||			//if the radius moves beyond top boundary
-				this.getCenterY() + this.getTranslateY() + this.getRadius() >= primaryStage.getHeight()-65) {	//if the radius moves beyond bottom boundary
+				this.getCenterY() + this.getTranslateY() + this.getRadius() >= primaryStage.getHeight()-80) {	//if the radius moves beyond bottom boundary
 			dy = - dy;
 		}
 	}
 
-	//updatmethod
-	public void update(ArrayList<WorldObject> allObjectList) {
-		sense(allObjectList);
-		moveRandomly(allObjectList);
-		//		rebound();
-		//here check if new move would be valid if it is then make move
 
-
-		checkInBounds();
-	}
 
 	//finds all objects with in senserange
 	//and decides which type of movement is required?
@@ -161,19 +188,93 @@ public class Bug extends WorldObject {
 	}
 
 	public void checkRange(WorldObject d) { // needs refining
-		
+
 		//use pythagoras for determining if collision
-		double deltaX = d.getCenterX() + d.getTranslateX() - this.getCenterX() + this.getTranslateX();
-		double deltaY = d.getCenterY() + d.getTranslateY() - this.getCenterY() + this.getTranslateY();
+		double deltaX = (d.getCenterX() + d.getTranslateX()) - (this.getCenterX() + this.getTranslateX());
+		double deltaY = (d.getCenterY() + d.getTranslateY()) - (this.getCenterY() + this.getTranslateY());
 		//now see if distance between 2 is less than the two radii + sense range
-		double distance = Math.sqrt((deltaX * deltaX) + (deltaY * deltaY)) - this.getRadius() - d.getRadius();
+		double distance = (Math.sqrt ((deltaX * deltaX) + (deltaY * deltaY)) ) - this.getRadius() - d.getRadius();
 		double minDistance =  this.getSenseRange() + d.getRadius() + this.getRadius() ;
 		if(distance < minDistance) {
-			if(d instanceof Bug) {
-				sensedObjects.add(d);
-				System.out.println("found within range, distance: " + distance);
-			}
+			//			if(d instanceof Bug) {
+			sensedObjects.add(d);
+			//				System.out.println("found within range, distance: " + distance);
+			//			}
 		}
+	}
+
+	public void decideAction(ArrayList<WorldObject> allObjectList) {
+		//need to sort by porximity
+		//insert others as add more classes
+		for (WorldObject w: sensedObjects) {
+			if (w instanceof Plant) {
+				System.out.println("found food");
+				moveToward(w, allObjectList);
+				break;
+			}
+			else {
+				moveRandomly(allObjectList);
+				break;
+			}
+
+		}
+		if (sensedObjects.isEmpty()) {
+			moveRandomly(allObjectList);
+		}
+	}
+	//SHould try more than just altering direction?
+	public void moveToward(WorldObject w, ArrayList<WorldObject> allObjectList) {
+		//get position and move toward object
+		double relXPos = (w.getCenterX()+getTranslateX()) - (this.getCenterX() + this.getTranslateX()); //establish if target on right or left of bug
+		double relYPos = (w.getCenterY()+getTranslateY()) - (this.getCenterY() + this.getTranslateY());
+
+		//this line resets direction
+		//		this.setDx((float) (Math.sqrt((this.getDx()+this.getDx())) ) );
+		//		this.setDy((float) (Math.sqrt((this.getDy()+this.getDy())) ) );
+		if (this.getDx()<0) {
+			this.setDx(-dx);
+		}
+		if (this.getDy()<0) {
+			this.setDx(-dy);
+		}
+
+		if (relXPos<0) {
+			//change dx to correct direction (first make positive)
+			this.setDx(this.dx *-1);
+			System.out.println("Plant to left");
+
+		}
+		//		if (relXPos>0) {
+		//			if (this.getDx() >=0) {
+		//				this.setDx(this.dx *-1);
+		//				System.out.println("Plant to left");
+		//			}
+		//		}
+
+		if (relYPos<0) {
+				this.setDy(this.dy *-1);
+				System.out.println("Plant to above");
+		}
+		//		if (relYPos>0) {
+		//			if (this.getDy() >=0) {
+		//				this.setDy(this.dy *-1);
+		//			}
+		//		}
+		double randSpeed = Math.random()*10;
+		if (randSpeed <1) {
+			this.dx += Math.random()-.5;
+			this.dy += Math.random()-.5;
+		}
+		//capping speed
+		if (this.dx > maxSpeed) {
+			this.dx = maxSpeed;
+		}
+		if (this.dy > maxSpeed) {
+			this.dy = maxSpeed;
+		}
+
+		moveBug(allObjectList);		
+
 	}
 
 

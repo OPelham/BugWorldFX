@@ -38,9 +38,6 @@ public class UI extends Application {
 	private int windowHeight = 800;
 	// make a universal arraylist of circe class?
 	private final ArrayList<WorldObject> allObjectList = new ArrayList<>();
-	private final ArrayList<Plant> plantList = new ArrayList<>();
-	private final ArrayList<Bug> bugList = new ArrayList<>();
-	private final ArrayList<Obstacle> obstacleList = new ArrayList<>();
 	// float x = 100, y = 100, dx = -1.5f, dy = -1.5f;
 
 	@Override
@@ -48,27 +45,7 @@ public class UI extends Application {
 		BorderPane bp = new BorderPane();
 		Pane root = new Pane();
 
-		// add bugs to arraylist
-		for (int i = 0; i < 20; i++) {
-			final Bug b = new Bug(primaryStage);
-			// bugList.add(b);
-			allObjectList.add(b);
-			root.getChildren().add(b);
-		}
-		// add plants to arraylist
-		for (int i = 0; i < 10; i++) {
-			final Plant p = new Plant();
-			// plantList.add(p);
-			allObjectList.add(p);
-			root.getChildren().add(p);
-		}
-		// add plants to arraylist
-		for (int i = 0; i < 10; i++) {
-			final Obstacle o = new Obstacle();
-			// obstacleList.add(o);
-			allObjectList.add(o);
-			root.getChildren().add(o);
-		}
+		populateWorld(primaryStage, root);
 
 		HBox hb = new HBox();
 		Button pausePlay = new Button("Pause");
@@ -80,7 +57,7 @@ public class UI extends Application {
 		bp.setCenter(root);
 		bp.setTop(hb);
 		Scene scene = new Scene(bp, windowWidth, windowHeight);
-//		scene.setFill(Color.DARKOLIVEGREEN);
+		//		scene.setFill(Color.DARKOLIVEGREEN);
 
 		KeyFrame frame = new KeyFrame(Duration.millis(16), new EventHandler<ActionEvent>() {
 
@@ -97,18 +74,27 @@ public class UI extends Application {
 		Timeline timeline = new Timeline(frame);
 		timeline.setCycleCount(javafx.animation.Animation.INDEFINITE);
 		timeline.play();
-		
+
 		pausePlay.setOnAction(new EventHandler<ActionEvent>() {
 			int i = 0;
 			@Override
 			public void handle(ActionEvent event) {
-				
+
 				if(i%2 == 0) {
 					timeline.pause();
 				} else {
 					timeline.play();
 				}
 				i++;
+			}
+		});
+		
+		restart.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+
+				
+				populateWorld(primaryStage, root);
 			}
 		});
 
@@ -130,6 +116,32 @@ public class UI extends Application {
 	//
 	// return false;
 	// }
+
+	public void populateWorld(Stage primaryStage, Pane root) {
+		// add bugs to arraylist
+		allObjectList.clear();
+		root.getChildren().clear();
+		for (int i = 0; i < 10; i++) {
+			final Bug b = new Bug(primaryStage);
+			// bugList.add(b);
+			allObjectList.add(b);
+			root.getChildren().add(b);
+		}
+		// add plants to arraylist
+		for (int i = 0; i < 1; i++) {
+			final Plant p = new Plant();
+			// plantList.add(p);
+			allObjectList.add(p);
+			root.getChildren().add(p);
+		}
+		// add plants to arraylist
+		for (int i = 0; i < 10; i++) {
+			final Obstacle o = new Obstacle();
+			// obstacleList.add(o);
+			allObjectList.add(o);
+			root.getChildren().add(o);
+		}
+	}
 
 	public static void main(String[] args) {
 		launch(args);
