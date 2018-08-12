@@ -26,7 +26,7 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 
 /**
- * UI is the class for drawing the userinterface
+ * UI is the class for drawing the user-interface and initializing the world
  * 
  * @author pelhamoliv
  *
@@ -36,31 +36,62 @@ public class UI extends Application {
 	// fields
 	private int windowWidth = 1200;
 	private int windowHeight = 800;
-	// make a universal arraylist of circe class?
 	private final ArrayList<WorldObject> allObjectList = new ArrayList<>();
-	// float x = 100, y = 100, dx = -1.5f, dy = -1.5f;
 
+	//this is the main entry point for the application
 	@Override
 	public void start(Stage primaryStage) throws Exception {
-		BorderPane bp = new BorderPane();
-		Pane root = new Pane();
 
-		populateWorld(primaryStage, root);
+		//**the following relates to the START SCREEN**
+		VBox startUp = new VBox(); 
 
-		HBox hb = new HBox();
+		// nodes of startUp scene
+		final Text intro = new Text("BUG WORLD FX");
+		intro.setFont(Font.font(70));
+		Button beginButton = new Button("Run Simulation");
+		beginButton.setAlignment(Pos.CENTER);	//currently not working
+
+		startUp.setPadding(new Insets(200));
+		startUp.getChildren().add(intro);
+		startUp.getChildren().add(beginButton);
+		startUp.setAlignment(Pos.TOP_CENTER);
+
+		Scene startUpScene = new Scene(startUp, windowWidth, windowHeight);		//start up scene
+
+		//**the following relates to the SIMULATION SCREEN**
+		BorderPane mainSimulationLayout = new BorderPane();		//Main layout
+		Pane simulationSection = new Pane();			//simulation component
+		HBox buttonSection = new HBox();				//for containing buttons
+
+		buttonSection.setAlignment(Pos.CENTER);			//setting position of buttons
 		Button pausePlay = new Button("Pause");
 		Button restart = new Button("Restart");
-		hb.getChildren().add(pausePlay);
-		hb.getChildren().add(restart);
-		hb.setStyle("-fx-background-color: #464646");
-		root.setStyle("-fx-background-color: #558000");
-		bp.setCenter(root);
-		bp.setTop(hb);
-		Scene scene = new Scene(bp, windowWidth, windowHeight);
-		//		scene.setFill(Color.DARKOLIVEGREEN);
+		buttonSection.getChildren().add(pausePlay);
+		buttonSection.getChildren().add(restart);
+		buttonSection.setStyle("-fx-background-color: #464646");
 
+		simulationSection.setStyle("-fx-background-color: #558000");	//changing background of simulation section
+		//assigning section of layout to main borderpane 
+		mainSimulationLayout.setCenter(simulationSection);
+		mainSimulationLayout.setTop(buttonSection);
+
+		//scene for mainSimulationLayout
+		Scene scene = new Scene(mainSimulationLayout, windowWidth, windowHeight);
+
+		//button in main scene set to start simulation screen
+		beginButton.setOnAction(new EventHandler<ActionEvent>(){
+
+			@Override
+			public void handle(ActionEvent arg0) {
+				primaryStage.setScene(scene);			//changeing stage to display/run simulation screen
+				populateWorld(primaryStage, simulationSection);		//populating world
+				primaryStage.show();
+			}
+
+		});
 		KeyFrame frame = new KeyFrame(Duration.millis(16), new EventHandler<ActionEvent>() {
 
+			//updating objects of world each frame
 			@Override
 			public void handle(ActionEvent event) {
 				for (WorldObject c : allObjectList) {
@@ -70,76 +101,63 @@ public class UI extends Application {
 				}
 			}
 		});
-
 		Timeline timeline = new Timeline(frame);
 		timeline.setCycleCount(javafx.animation.Animation.INDEFINITE);
 		timeline.play();
 
+		//Setting actions for buttons at top border
+		//these are added here as pause/play requires timeline to be declared/instantiated
 		pausePlay.setOnAction(new EventHandler<ActionEvent>() {
 			int i = 0;
 			@Override
 			public void handle(ActionEvent event) {
 
 				if(i%2 == 0) {
-					timeline.pause();
+					timeline.pause();		//on first press will pause
 				} else {
-					timeline.play();
+					timeline.play();		//every second press will play
 				}
 				i++;
 			}
 		});
-		
+
 		restart.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
-
-				
-				populateWorld(primaryStage, root);
+				populateWorld(primaryStage, simulationSection);		//repopulates world on reset
 			}
 		});
 
+		//setting up the stage
 		primaryStage.setTitle("Bug World FX");
-		primaryStage.setScene(scene);
+		primaryStage.setScene(startUpScene);
 		primaryStage.show();
 
 	}
 
-	// public boolean checkCollisions(WorldObject c) {
-	//
-	// for (WorldObject d: allObjectList) {
-	// if(c!=d) {
-	// if(c.conductCollision(d)) {
-	// return true;
-	// }
-	// }
-	// }
-	//
-	// return false;
-	// }
 
-	public void populateWorld(Stage primaryStage, Pane root) {
+	//This method Populates the world with objects
+	public void populateWorld(Stage primaryStage, Pane simulationSection) {
 		// add bugs to arraylist
-		allObjectList.clear();
-		root.getChildren().clear();
+		allObjectList.clear();			//clears here so that upon reset past list in not carried over
+//		simulationSection.getChildren().clear();
+		//add bugs to arraylist
 		for (int i = 0; i < 10; i++) {
-			final Bug b = new Bug(primaryStage);
-			// bugList.add(b);
-			allObjectList.add(b);
-			root.getChildren().add(b);
-		}
-		// add plants to arraylist
-		for (int i = 0; i < 1; i++) {
-			final Plant p = new Plant();
-			// plantList.add(p);
-			allObjectList.add(p);
-			root.getChildren().add(p);
+			final Bug bugToAdd = new Bug(primaryStage);
+			allObjectList.add(bugToAdd);
+			simulationSection.getChildren().add(bugToAdd);			//adds node so will be displayed
 		}
 		// add plants to arraylist
 		for (int i = 0; i < 10; i++) {
-			final Obstacle o = new Obstacle();
-			// obstacleList.add(o);
-			allObjectList.add(o);
-			root.getChildren().add(o);
+			final Plant plantToAdd = new Plant();
+			allObjectList.add(plantToAdd);
+			simulationSection.getChildren().add(plantToAdd);		//adds node so will be displayed
+		}
+		// add obstacles to arraylist
+		for (int i = 0; i < 10; i++) {
+			final Obstacle obstacleToAdd = new Obstacle();
+			allObjectList.add(obstacleToAdd);
+			simulationSection.getChildren().add(obstacleToAdd);		//adds node so will be displayed
 		}
 	}
 
