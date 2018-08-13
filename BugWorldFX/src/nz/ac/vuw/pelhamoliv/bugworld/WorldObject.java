@@ -19,7 +19,7 @@ public class WorldObject extends Circle{
 	//fields
 	private List<WorldObject> reachableObjects = new ArrayList<WorldObject>(); //any objects in range
 	//need way of sorting this by distance
-	
+
 	//constructors
 	public WorldObject() {
 		super();
@@ -27,6 +27,12 @@ public class WorldObject extends Circle{
 	public WorldObject(double radius) {
 		super();
 		this.setRadius(radius);
+	}
+	public List<WorldObject> getReachableObjects() {
+		return reachableObjects;
+	}
+	public void setReachableObjects(List<WorldObject> reachableObjects) {
+		this.reachableObjects = reachableObjects;
 	}
 
 	//establishes weather a collsion has occured given potential move coordinates
@@ -40,7 +46,7 @@ public class WorldObject extends Circle{
 		double minDistance = o.getRadius() + this.getRadius(); //smallest valid distance between these objects is the sum of their respective radii
 		return(distance < minDistance);		//return true if a collision
 	}
-	
+
 	//goes through all other world objects in world and sees if this object will collide with each
 	//returns true if collides with first checked
 	//need to find way of sorting by distance
@@ -55,12 +61,26 @@ public class WorldObject extends Circle{
 		return false;
 	}
 
-	
-	
-	//eat of be eaten
-	public void checkReach() {
+
+
+	//checks within interactable area for interactable objects
+	public void checkReach(ArrayList<WorldObject> allObjectList) {
+		for(WorldObject d: allObjectList) {
+			double deltaX = (this.getTranslateX()) - (d.getTranslateX()) ;
+			double deltaY = (this.getTranslateY()) - (d.getTranslateY());
+			//now see if distance between 2 is less than the two radii + sense range
+			double distance = (Math.sqrt ((deltaX * deltaX) + (deltaY * deltaY)) ) - this.getRadius() - d.getRadius();
+			double minDistance =  5 + d.getRadius() + this.getRadius() ;
+			if(distance < minDistance) {
+				//			if(d instanceof Bug) {
+				reachableObjects.add(d);
+		}
 		
+			//				System.out.println("found within range, distance: " + distance);
+			//			}
+		}
 	}
+
 
 
 }

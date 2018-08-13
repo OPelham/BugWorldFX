@@ -49,6 +49,7 @@ public class SetUp extends Application {
 		final Text intro = new Text("BUG WORLD FX");
 		intro.setFont(Font.font(70));
 		Button beginButton = new Button("Run Simulation");
+		beginButton.setDefaultButton(true);
 		beginButton.setAlignment(Pos.CENTER);	//currently not working
 
 		startUp.setPadding(new Insets(200));
@@ -97,6 +98,11 @@ public class SetUp extends Application {
 				for (WorldObject c : allObjectList) {
 					if (c instanceof Bug) {
 						((Bug) c).update(allObjectList);
+					}
+				}
+				for (WorldObject c : allObjectList) {
+					if (c instanceof Plant) {
+						((Plant) c).update();
 					}
 				}
 			}
