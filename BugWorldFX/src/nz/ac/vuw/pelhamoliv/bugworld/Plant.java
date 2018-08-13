@@ -12,7 +12,7 @@ public class Plant extends WorldObject{
 		super(10);
 		this.size = (int)(Math.random()*10+1);
 		this.setFill(Color.LAWNGREEN);
-		this.setTranslateX(Math.random()* 1150 + 25 );
+		this.setTranslateX(Math.random()* 1100 + 25 );
 		this.setTranslateY(Math.random()* 735 + 25 );
 	}
 

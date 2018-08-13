@@ -26,12 +26,12 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 
 /**
- * UI is the class for drawing the user-interface and initializing the world
+ * SetUp is the class for drawing the user-interface and initializing the world
  * 
  * @author pelhamoliv
  *
  */
-public class UI extends Application {
+public class SetUp extends Application {
 
 	// fields
 	private int windowWidth = 1200;
@@ -140,21 +140,21 @@ public class UI extends Application {
 	public void populateWorld(Stage primaryStage, Pane simulationSection) {
 		// add bugs to arraylist
 		allObjectList.clear();			//clears here so that upon reset past list in not carried over
-//		simulationSection.getChildren().clear();
+		simulationSection.getChildren().clear();
 		//add bugs to arraylist
-		for (int i = 0; i < 10; i++) {
+		for (int i = 0; i < 2; i++) {
 			final Bug bugToAdd = new Bug(primaryStage);
 			allObjectList.add(bugToAdd);
 			simulationSection.getChildren().add(bugToAdd);			//adds node so will be displayed
 		}
 		// add plants to arraylist
-		for (int i = 0; i < 10; i++) {
+		for (int i = 0; i < 2; i++) {
 			final Plant plantToAdd = new Plant();
 			allObjectList.add(plantToAdd);
 			simulationSection.getChildren().add(plantToAdd);		//adds node so will be displayed
 		}
 		// add obstacles to arraylist
-		for (int i = 0; i < 10; i++) {
+		for (int i = 0; i < 1; i++) {
 			final Obstacle obstacleToAdd = new Obstacle();
 			allObjectList.add(obstacleToAdd);
 			simulationSection.getChildren().add(obstacleToAdd);		//adds node so will be displayed

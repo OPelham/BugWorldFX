@@ -118,20 +118,20 @@ public class Bug extends WorldObject {
 		if (this.dy > maxSpeed) {
 			this.dy = maxSpeed;
 		}
-		
+
 		moveBug(allObjectList);
-		
+
 	}
 
 	public void moveBug(ArrayList<WorldObject> allObjectList) {
 		//movement
-				//first check if collision on move if none move
-				double potnX = this.getTranslateX() + dx;
-				double potnY = this.getTranslateY() + dy;
-				if(!(this.checkCollisions( potnX, potnY, allObjectList))) {
-					this.setTranslateX(this.getTranslateX() + dx);
-					this.setTranslateY(this.getTranslateY() + dy);
-				}
+		//first check if collision on move if none move
+		double potnX = this.getTranslateX() + dx;
+		double potnY = this.getTranslateY() + dy;
+		if(!(this.checkCollisions( potnX, potnY, allObjectList))) {
+			this.setTranslateX(this.getTranslateX() + dx);
+			this.setTranslateY(this.getTranslateY() + dy);
+		}
 	}
 
 	//a method to check if the bug is within bounds -- 
@@ -190,8 +190,8 @@ public class Bug extends WorldObject {
 	public void checkRange(WorldObject d) { // needs refining
 
 		//use pythagoras for determining if collision
-		double deltaX = (d.getCenterX() + d.getTranslateX()) - (this.getCenterX() + this.getTranslateX());
-		double deltaY = (d.getCenterY() + d.getTranslateY()) - (this.getCenterY() + this.getTranslateY());
+		double deltaX = (this.getCenterX() + this.getTranslateX()) - (d.getCenterX() + d.getTranslateX()) ;
+		double deltaY = (this.getCenterY() + this.getTranslateY()) - (d.getCenterY() + d.getTranslateY());
 		//now see if distance between 2 is less than the two radii + sense range
 		double distance = (Math.sqrt ((deltaX * deltaX) + (deltaY * deltaY)) ) - this.getRadius() - d.getRadius();
 		double minDistance =  this.getSenseRange() + d.getRadius() + this.getRadius() ;
@@ -207,7 +207,7 @@ public class Bug extends WorldObject {
 		//need to sort by porximity
 		//insert others as add more classes
 		for (WorldObject w: sensedObjects) {
-			if (w instanceof Plant) {
+			if (w instanceof Plant && w!=this) {
 				System.out.println("found food");
 				moveToward(w, allObjectList);
 				break;
@@ -225,46 +225,28 @@ public class Bug extends WorldObject {
 	//SHould try more than just altering direction?
 	public void moveToward(WorldObject w, ArrayList<WorldObject> allObjectList) {
 		//get position and move toward object
-		double relXPos = (w.getCenterX()+getTranslateX()) - (this.getCenterX() + this.getTranslateX()); //establish if target on right or left of bug
-		double relYPos = (w.getCenterY()+getTranslateY()) - (this.getCenterY() + this.getTranslateY());
-
-		//this line resets direction
-		//		this.setDx((float) (Math.sqrt((this.getDx()+this.getDx())) ) );
-		//		this.setDy((float) (Math.sqrt((this.getDy()+this.getDy())) ) );
-		if (this.getDx()<0) {
-			this.setDx(-dx);
+		double relXPos = (w.getTranslateX() - this.getTranslateX()); //establish if target on right or left of bug
+		double relYPos = (w.getTranslateY() - this.getTranslateY());
+//		
+		
+		if(relXPos > 0) {	//if object is to the right
+			setDx(maxSpeed);	//set movement to max to right
+//			
 		}
-		if (this.getDy()<0) {
-			this.setDx(-dy);
+		
+		if(relXPos < 0) {	//object is to the left
+			setDx(-maxSpeed);	//set movement to max to left
 		}
-
-		if (relXPos<0) {
-			//change dx to correct direction (first make positive)
-			this.setDx(this.dx *-1);
-			System.out.println("Plant to left");
-
+		
+		if(relYPos > 0) {	//if object is to the right
+			setDy(maxSpeed);	//set movement to max to right
 		}
-		//		if (relXPos>0) {
-		//			if (this.getDx() >=0) {
-		//				this.setDx(this.dx *-1);
-		//				System.out.println("Plant to left");
-		//			}
-		//		}
-
-		if (relYPos<0) {
-				this.setDy(this.dy *-1);
-				System.out.println("Plant to above");
+		
+		if(relYPos < 0) {	//object is to the left
+			setDy(-maxSpeed);	//set movement to max to left
 		}
-		//		if (relYPos>0) {
-		//			if (this.getDy() >=0) {
-		//				this.setDy(this.dy *-1);
-		//			}
-		//		}
-		double randSpeed = Math.random()*10;
-		if (randSpeed <1) {
-			this.dx += Math.random()-.5;
-			this.dy += Math.random()-.5;
-		}
+		
+//		
 		//capping speed
 		if (this.dx > maxSpeed) {
 			this.dx = maxSpeed;
