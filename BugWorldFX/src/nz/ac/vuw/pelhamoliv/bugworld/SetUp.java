@@ -15,16 +15,20 @@ import javafx.scene.chart.PieChart;
 import javafx.scene.control.Button;
 import javafx.scene.control.Slider;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import javafx.util.BuilderFactory;
 import javafx.util.Duration;
 
 /**
@@ -42,11 +46,20 @@ public class SetUp extends Application {
 	private int numOfPlant;
 	private int numOfObstacle;
 	private final ArrayList<WorldObject> allObjectList = new ArrayList<>();
+	
+	
 
 	//this is the main entry point for the application
 	@Override
 	public void start(Stage primaryStage) throws Exception {
-
+		//images
+		Image plantImage = new Image("/PlantIm.png");		//plant image
+		ImagePattern plantFill = new ImagePattern(plantImage);
+		Image bugImage = new Image("/PreyBug.png");			//preyBug image
+		ImagePattern bugFill = new ImagePattern(bugImage);
+		Image obstaceImage = new Image("/RockIm.png");			//obstacle image
+		ImagePattern obstacleFill = new ImagePattern(obstaceImage);
+		
 		//**the following relates to the START SCREEN**
 		VBox startUp = new VBox(); 
 
@@ -99,6 +112,7 @@ public class SetUp extends Application {
 		mainSimulationLayout.setCenter(simulationSection);
 		mainSimulationLayout.setTop(buttonSection);
 
+
 		//scene for mainSimulationLayout
 		Scene scene = new Scene(mainSimulationLayout, windowWidth, windowHeight);
 
@@ -139,7 +153,7 @@ public class SetUp extends Application {
 				numOfObstacle = inputCheck(obstacleNumField.getText());
 
 				primaryStage.setScene(scene);			//changeing stage to display/run simulation screen
-				populateWorld(primaryStage, simulationSection);		//populating world
+				populateWorld(primaryStage, simulationSection, plantFill, bugFill, obstacleFill);		//populating world
 				primaryStage.show();
 				timeline.play();
 
@@ -166,7 +180,7 @@ public class SetUp extends Application {
 		restart.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
-				populateWorld(primaryStage, simulationSection);		//repopulates world on reset
+				populateWorld(primaryStage, simulationSection, plantFill, bugFill, obstacleFill);		//repopulates world on reset
 			}
 		});
 
@@ -189,25 +203,30 @@ public class SetUp extends Application {
 
 
 	//This method Populates the world with objects
-	public void populateWorld(Stage primaryStage, Pane simulationSection) {
+	public void populateWorld(Stage primaryStage, Pane simulationSection, ImagePattern plantFill, ImagePattern bugFill, ImagePattern obstacleFill) {
 		// add bugs to arraylist
+
+
 		allObjectList.clear();			//clears here so that upon reset past list in not carried over
 		simulationSection.getChildren().clear();
 		//add bugs to arraylist
 		for (int i = 0; i < numOfBug; i++) {
 			final Bug bugToAdd = new Bug(primaryStage);
+			bugToAdd.setFill(bugFill);
 			allObjectList.add(bugToAdd);
 			simulationSection.getChildren().add(bugToAdd);			//adds node so will be displayed
 		}
 		// add plants to arraylist
 		for (int i = 0; i < numOfPlant; i++) {
 			final Plant plantToAdd = new Plant();
+			plantToAdd.setFill(plantFill);
 			allObjectList.add(plantToAdd);
 			simulationSection.getChildren().add(plantToAdd);		//adds node so will be displayed
 		}
 		// add obstacles to arraylist
 		for (int i = 0; i < numOfObstacle; i++) {
 			final Obstacle obstacleToAdd = new Obstacle();
+			obstacleToAdd.setFill(obstacleFill);
 			allObjectList.add(obstacleToAdd);
 			simulationSection.getChildren().add(obstacleToAdd);		//adds node so will be displayed
 		}

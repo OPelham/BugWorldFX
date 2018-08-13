@@ -21,13 +21,14 @@ public class Bug extends WorldObject {
 
 	//constructor
 	public Bug(Stage primaryStage) {
-		super(4);
+		super(10);	//sets Radius calling parent contructor
 		this.maxSpeed = 4.0f;
 		this.primaryStage = primaryStage;
 		this.setHungerLevel(10);
 		this.setTranslateX(Math.random()* 1200 );
 		this.setTranslateY(Math.random()* 800 );
 		this.setSenseRange(200);
+		this.checkSize();
 		//		
 		//		this.setCenterX((float) (Math.random()*primaryStage.getMaxWidth()-18));
 		//		this.setCenterY((float) (Math.random()*primaryStage.getMaxHeight()-45));
@@ -104,6 +105,7 @@ public class Bug extends WorldObject {
 		if (hungerLevel == 0) {	//move selection to die method
 			die(allObjectList);
 		}
+		checkSize();
 	}
 
 	public void makeHungery() {
@@ -117,7 +119,7 @@ public class Bug extends WorldObject {
 	//a class to move bug randomly (direction and speed)
 	//there will be a one in 10 chance of changeing direction for each of y and x directions
 	public void moveRandomly(ArrayList<WorldObject> allObjectList) {
-		this.setFill(Color.BLACK);	//debugging
+//		this.setFill(Color.BLACK);	//debugging
 		double randx = Math.random()*40;
 		double randy = Math.random()*40;
 		double randSpeed = Math.random()*10;
@@ -245,7 +247,7 @@ public class Bug extends WorldObject {
 	//SHould try more than just altering direction?
 	public void moveToward(WorldObject w, ArrayList<WorldObject> allObjectList) {
 		//get position and move toward object
-		this.setFill(Color.RED);	//debugging
+//		this.setFill(Color.RED);	//debugging
 		double relXPos = (w.getTranslateX() - this.getTranslateX()); //establish if target on right or left of bug
 		double relYPos = (w.getTranslateY() - this.getTranslateY());
 		//		
@@ -297,6 +299,10 @@ public class Bug extends WorldObject {
 				w.setVisible(false);
 			}
 		}
+	}
+	
+	public void checkSize() {
+		this.setRadius(hungerLevel+5);
 	}
 
 

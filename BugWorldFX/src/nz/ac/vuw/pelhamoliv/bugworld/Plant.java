@@ -11,7 +11,7 @@ public class Plant extends WorldObject{
 	private int size;
 	
 	public Plant() {
-		super(10);
+		super(50);
 		this.setSize((int)(Math.random()*5+1));
 		this.setFill(Color.LAWNGREEN);
 		this.setTranslateX(Math.random()* 1100 + 25 );
@@ -34,6 +34,7 @@ public class Plant extends WorldObject{
 		if(size>5) {
 			setSize(5);
 		}
+		checkSize();
 	}
 	
 	public void beEaten() {
@@ -44,6 +45,10 @@ public class Plant extends WorldObject{
 		if (size ==0) {
 			this.setVisible(false);
 		}
+	}
+	
+	public void checkSize() {
+		this.setRadius(size*10);
 	}
 	
 //	public void update(ArrayList<WorldObject> allObjectList) {

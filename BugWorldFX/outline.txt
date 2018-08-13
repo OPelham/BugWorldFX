@@ -28,3 +28,5 @@ Issue getting bugs to find food, moving too quickly or only wanting one bug to g
 	if either = 0 then dies - visibility is 0 no regrowth for trees
 	(is there a way to remove?)
 	when interacting with objects do check for vissibility first
+	
+	group would allow for easy remove and set opacity
