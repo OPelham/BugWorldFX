@@ -14,3 +14,17 @@ Scenes
 Issue getting bugs to find food, moving too quickly or only wanting one bug to go for
 	- had to ensure only moved once if food found not once for every check
 	
+	bugs
+	0-4 hungerlevel
+	of <2 search for food
+	1 in 5 chance of reducing hunger per update
+	when eating sets hunger to 4
+	
+	plants
+	0-5 growth
+	one in 10 change of growth per update
+	when eaten from reduces size by one
+	
+	if either = 0 then dies - visibility is 0 no regrowth for trees
+	(is there a way to remove?)
+	when interacting with objects do check for vissibility first

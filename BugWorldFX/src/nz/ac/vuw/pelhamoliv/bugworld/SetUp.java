@@ -13,6 +13,8 @@ import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.chart.PieChart;
 import javafx.scene.control.Button;
+import javafx.scene.control.Slider;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -36,6 +38,9 @@ public class SetUp extends Application {
 	// fields
 	private int windowWidth = 1200;
 	private int windowHeight = 800;
+	private int numOfBug;
+	private int numOfPlant;
+	private int numOfObstacle;
 	private final ArrayList<WorldObject> allObjectList = new ArrayList<>();
 
 	//this is the main entry point for the application
@@ -51,10 +56,26 @@ public class SetUp extends Application {
 		Button beginButton = new Button("Run Simulation");
 		beginButton.setDefaultButton(true);
 		beginButton.setAlignment(Pos.CENTER);	//currently not working
+		Text bugNumText = new Text("Number of bugs");
+		TextField bugNumField = new TextField();
+		bugNumField.setMaxWidth(100);
+		Text plantNumText = new Text("Number of plants");
+		TextField plantNumField = new TextField();
+		plantNumField.setMaxWidth(100);
+		Text obstacleNumText = new Text("Number of obstacles");
+		TextField obstacleNumField = new TextField();
+		obstacleNumField.setMaxWidth(100);
 
-		startUp.setPadding(new Insets(200));
+		startUp.setPadding(new Insets(180));
 		startUp.getChildren().add(intro);
+		startUp.getChildren().add(bugNumText);
+		startUp.getChildren().add(bugNumField);
+		startUp.getChildren().add(plantNumText);
+		startUp.getChildren().add(plantNumField);
+		startUp.getChildren().add(obstacleNumText);
+		startUp.getChildren().add(obstacleNumField);
 		startUp.getChildren().add(beginButton);
+		startUp.setSpacing(10);
 		startUp.setAlignment(Pos.TOP_CENTER);
 
 		Scene startUpScene = new Scene(startUp, windowWidth, windowHeight);		//start up scene
@@ -67,11 +88,13 @@ public class SetUp extends Application {
 		buttonSection.setAlignment(Pos.CENTER);			//setting position of buttons
 		Button pausePlay = new Button("Pause");
 		Button restart = new Button("Restart");
+		Button returnbtn = new Button("Menu");
 		buttonSection.getChildren().add(pausePlay);
 		buttonSection.getChildren().add(restart);
+		buttonSection.getChildren().add(returnbtn);
 		buttonSection.setStyle("-fx-background-color: #464646");
 
-		simulationSection.setStyle("-fx-background-color: #558000");	//changing background of simulation section
+		simulationSection.setStyle("-fx-background-color: #ccd3e0");	//changing background of simulation section
 		//assigning section of layout to main borderpane 
 		mainSimulationLayout.setCenter(simulationSection);
 		mainSimulationLayout.setTop(buttonSection);
@@ -79,30 +102,26 @@ public class SetUp extends Application {
 		//scene for mainSimulationLayout
 		Scene scene = new Scene(mainSimulationLayout, windowWidth, windowHeight);
 
+		//textfield actions
+
+
+
 		//button in main scene set to start simulation screen
-		beginButton.setOnAction(new EventHandler<ActionEvent>(){
 
-			@Override
-			public void handle(ActionEvent arg0) {
-				primaryStage.setScene(scene);			//changeing stage to display/run simulation screen
-				populateWorld(primaryStage, simulationSection);		//populating world
-				primaryStage.show();
-			}
 
-		});
 		KeyFrame frame = new KeyFrame(Duration.millis(16), new EventHandler<ActionEvent>() {
 
 			//updating objects of world each frame
 			@Override
 			public void handle(ActionEvent event) {
 				for (WorldObject c : allObjectList) {
-					if (c instanceof Bug) {
-						((Bug) c).update(allObjectList);
-					}
-				}
-				for (WorldObject c : allObjectList) {
-					if (c instanceof Plant) {
-						((Plant) c).update();
+					if(c.isVisible()) {
+						if (c instanceof Bug) {
+							((Bug) c).update(allObjectList);
+						}
+						if (c instanceof Plant) {
+							((Plant) c).update();
+						}
 					}
 				}
 			}
@@ -110,6 +129,23 @@ public class SetUp extends Application {
 		Timeline timeline = new Timeline(frame);
 		timeline.setCycleCount(javafx.animation.Animation.INDEFINITE);
 		timeline.play();
+
+		beginButton.setOnAction(new EventHandler<ActionEvent>(){
+
+			@Override
+			public void handle(ActionEvent arg0) {
+				numOfBug = inputCheck(bugNumField.getText());	//add outputs and reset for invalid
+				numOfPlant = inputCheck(plantNumField.getText());
+				numOfObstacle = inputCheck(obstacleNumField.getText());
+
+				primaryStage.setScene(scene);			//changeing stage to display/run simulation screen
+				populateWorld(primaryStage, simulationSection);		//populating world
+				primaryStage.show();
+				timeline.play();
+
+			}
+		});
+
 
 		//Setting actions for buttons at top border
 		//these are added here as pause/play requires timeline to be declared/instantiated
@@ -134,6 +170,16 @@ public class SetUp extends Application {
 			}
 		});
 
+		returnbtn.setOnAction(new EventHandler<ActionEvent>() {
+
+			@Override
+			public void handle(ActionEvent event) {
+				primaryStage.setScene(startUpScene);			//changeing stage to display/run simulation screen
+				timeline.stop();
+				primaryStage.show();
+			}
+		});
+
 		//setting up the stage
 		primaryStage.setTitle("Bug World FX");
 		primaryStage.setScene(startUpScene);
@@ -148,23 +194,36 @@ public class SetUp extends Application {
 		allObjectList.clear();			//clears here so that upon reset past list in not carried over
 		simulationSection.getChildren().clear();
 		//add bugs to arraylist
-		for (int i = 0; i < 10; i++) {
+		for (int i = 0; i < numOfBug; i++) {
 			final Bug bugToAdd = new Bug(primaryStage);
 			allObjectList.add(bugToAdd);
 			simulationSection.getChildren().add(bugToAdd);			//adds node so will be displayed
 		}
 		// add plants to arraylist
-		for (int i = 0; i < 10; i++) {
+		for (int i = 0; i < numOfPlant; i++) {
 			final Plant plantToAdd = new Plant();
 			allObjectList.add(plantToAdd);
 			simulationSection.getChildren().add(plantToAdd);		//adds node so will be displayed
 		}
 		// add obstacles to arraylist
-		for (int i = 0; i < 0; i++) {
+		for (int i = 0; i < numOfObstacle; i++) {
 			final Obstacle obstacleToAdd = new Obstacle();
 			allObjectList.add(obstacleToAdd);
 			simulationSection.getChildren().add(obstacleToAdd);		//adds node so will be displayed
 		}
+	}
+
+	public int inputCheck(String toCheck) {
+		int i = -1;
+		try  
+		{  
+			i = Integer.parseInt(toCheck);
+		}  
+		catch(NumberFormatException nfe)  
+		{  
+			return i;  
+		}  
+		return i;  
 	}
 
 	public static void main(String[] args) {

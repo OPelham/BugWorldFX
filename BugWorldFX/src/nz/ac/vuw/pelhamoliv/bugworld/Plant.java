@@ -12,7 +12,7 @@ public class Plant extends WorldObject{
 	
 	public Plant() {
 		super(10);
-		this.setSize((int)(Math.random()*10+10));
+		this.setSize((int)(Math.random()*5+1));
 		this.setFill(Color.LAWNGREEN);
 		this.setTranslateX(Math.random()* 1100 + 25 );
 		this.setTranslateY(Math.random()* 735 + 25 );
@@ -26,7 +26,24 @@ public class Plant extends WorldObject{
 	}
 	
 	public void update() {
-		size++;
+		die();
+		double growthChance = Math.random()*50;	//move to method
+		if(isVisible() && growthChance < 1) {
+			size++;
+		}
+		if(size>5) {
+			setSize(5);
+		}
+	}
+	
+	public void beEaten() {
+		size = size -2;
+	}
+	
+	public void die() {		//move to superclass and make abstract?
+		if (size ==0) {
+			this.setVisible(false);
+		}
 	}
 	
 //	public void update(ArrayList<WorldObject> allObjectList) {

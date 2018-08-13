@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javafx.collections.transformation.SortedList;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 public class Bug extends WorldObject {
@@ -23,7 +24,7 @@ public class Bug extends WorldObject {
 		super(4);
 		this.maxSpeed = 4.0f;
 		this.primaryStage = primaryStage;
-		this.setHungerLevel((int)(Math.random()* 1000));
+		this.setHungerLevel(10);
 		this.setTranslateX(Math.random()* 1200 );
 		this.setTranslateY(Math.random()* 800 );
 		this.setSenseRange(200);
@@ -94,19 +95,29 @@ public class Bug extends WorldObject {
 
 	//updatmethod
 	public void update(ArrayList<WorldObject> allObjectList) {
-		setHungerLevel(hungerLevel--);
+		makeHungery();
 		sense(allObjectList);
 		decideAction(allObjectList);
 		//		moveRandomly(allObjectList);
 		checkInBounds();
 		checkReach(allObjectList);
-		eat(allObjectList);
+		if (hungerLevel == 0) {	//move selection to die method
+			die(allObjectList);
+		}
 	}
 
+	public void makeHungery() {
+		System.out.println("makeHungry" + hungerLevel);
+		double hungerOdds = Math.random()*100;
+		if(hungerOdds<1) {
+			hungerLevel--;
+		}
+	}
 
 	//a class to move bug randomly (direction and speed)
 	//there will be a one in 10 chance of changeing direction for each of y and x directions
 	public void moveRandomly(ArrayList<WorldObject> allObjectList) {
+		this.setFill(Color.BLACK);	//debugging
 		double randx = Math.random()*40;
 		double randy = Math.random()*40;
 		double randSpeed = Math.random()*10;
@@ -169,22 +180,6 @@ public class Bug extends WorldObject {
 
 	}
 
-	public void rebound() {
-		if(this.getCenterX() + this.getTranslateX() <= this.getRadius() || 		//if the radius moves beyond left boundary
-				this.getCenterX() + this.getTranslateX() + this.getRadius() >= primaryStage.getWidth()-18) {	//if the radius moves beyond right boundary
-			dx = - dx;
-		}
-		//this part identifies movement will take them outside boundry right boundry, if so move left
-
-
-		if(this.getCenterY() + this.getTranslateY() <= this.getRadius() ||			//if the radius moves beyond top boundary
-				this.getCenterY() + this.getTranslateY() + this.getRadius() >= primaryStage.getHeight()-80) {	//if the radius moves beyond bottom boundary
-			dy = - dy;
-		}
-	}
-
-
-
 	//finds all objects with in senserange
 	//and decides which type of movement is required?
 	public void sense(ArrayList<WorldObject> allObjectList) { 
@@ -194,7 +189,6 @@ public class Bug extends WorldObject {
 			if(this!=d) {
 				// check the distances for each and compare to sense range
 				checkRange(d);
-
 			}
 		}
 	}
@@ -216,15 +210,14 @@ public class Bug extends WorldObject {
 	}
 
 	public void decideAction(ArrayList<WorldObject> allObjectList) {
-		hungerLevel--;
 		//need to sort by porximity
 		//insert others as add more classes
-		if(getHungerLevel()<100) {		//if hunger level less than 25 search for food
+		if(getHungerLevel()<4) {		//if hunger level less than 4 search for food
 		if (sensedObjects.isEmpty()) {
 			moveRandomly(allObjectList);
 		} else if(sensedFoodBoolean()){
 			for (WorldObject w: sensedObjects) {
-				if (w instanceof Plant) {
+				if (w instanceof Plant && w.isVisible()) {
 					moveToward(w, allObjectList);
 					break;
 				}
@@ -242,7 +235,7 @@ public class Bug extends WorldObject {
 	
 	public boolean sensedFoodBoolean() {
 		for (WorldObject w: sensedObjects) {
-			if (w instanceof Plant) {
+			if (w instanceof Plant && w.isVisible()) {
 				return true;
 			}
 		}
@@ -252,6 +245,7 @@ public class Bug extends WorldObject {
 	//SHould try more than just altering direction?
 	public void moveToward(WorldObject w, ArrayList<WorldObject> allObjectList) {
 		//get position and move toward object
+		this.setFill(Color.RED);	//debugging
 		double relXPos = (w.getTranslateX() - this.getTranslateX()); //establish if target on right or left of bug
 		double relYPos = (w.getTranslateY() - this.getTranslateY());
 		//		
@@ -282,16 +276,25 @@ public class Bug extends WorldObject {
 			this.dy = maxSpeed;
 		}
 
-		moveBug(allObjectList);		
+		moveBug(allObjectList);	
+		eat(allObjectList);
 
 	}
 	
 	public void eat(ArrayList<WorldObject> allObjectList) {
 		checkReach(allObjectList);
-		for (WorldObject w: getReachableObjects()) {
+		for (WorldObject w: this.getReachableObjects()) {
 			if(w instanceof Plant) {
-				((Plant) w).setSize(((Plant) w).getSize()-1);
-				this.setHungerLevel(hungerLevel + 10);
+				((Plant) w).beEaten();
+				hungerLevel += 4;
+			}
+		}
+	}
+	
+	public void die(ArrayList<WorldObject> allObjectList) {
+		for(WorldObject w: allObjectList) {
+			if (w == this) {
+				w.setVisible(false);
 			}
 		}
 	}

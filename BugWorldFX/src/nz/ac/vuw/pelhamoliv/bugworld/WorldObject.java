@@ -52,7 +52,7 @@ public class WorldObject extends Circle{
 	//need to find way of sorting by distance
 	public boolean checkCollisions(double potnX, double potnY, ArrayList<WorldObject> allObjectList) {
 		for (WorldObject d: allObjectList) {
-			if(this!=d) {
+			if(this!=d && d.isVisible()) {
 				if(this.conductCollision(potnX, potnY, d)) { //see if this object collides with 
 					return true;
 				}
@@ -65,17 +65,20 @@ public class WorldObject extends Circle{
 
 	//checks within interactable area for interactable objects
 	public void checkReach(ArrayList<WorldObject> allObjectList) {
+		reachableObjects.clear();
 		for(WorldObject d: allObjectList) {
-			double deltaX = (this.getTranslateX()) - (d.getTranslateX()) ;
-			double deltaY = (this.getTranslateY()) - (d.getTranslateY());
-			//now see if distance between 2 is less than the two radii + sense range
-			double distance = (Math.sqrt ((deltaX * deltaX) + (deltaY * deltaY)) ) - this.getRadius() - d.getRadius();
-			double minDistance =  5 + d.getRadius() + this.getRadius() ;
-			if(distance < minDistance) {
-				//			if(d instanceof Bug) {
-				reachableObjects.add(d);
-		}
-		
+			if(d.isVisible()) {
+				double deltaX = (this.getTranslateX()) - (d.getTranslateX()) ;
+				double deltaY = (this.getTranslateY()) - (d.getTranslateY());
+				//now see if distance between 2 is less than the two radii + sense range
+				double distance = (Math.sqrt ((deltaX * deltaX) + (deltaY * deltaY)) ) - this.getRadius() - d.getRadius();
+				double minDistance =  2 + d.getRadius() + this.getRadius() ;
+				if(distance < minDistance) {
+					//			if(d instanceof Bug) {
+					reachableObjects.add(d);
+				}
+			}
+
 			//				System.out.println("found within range, distance: " + distance);
 			//			}
 		}
