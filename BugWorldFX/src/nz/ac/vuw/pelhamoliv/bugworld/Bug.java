@@ -11,6 +11,7 @@ public class Bug extends WorldObject {
 	private Stage primaryStage;
 	private float maxSpeed;
 	private double senseRange;
+	private int hungerLevel;
 	private List<WorldObject> sensedObjects = new ArrayList<WorldObject>(); //need way to sort
 	//could make sort interface and sort by distance to this object? maybe make it a queue instead?
 
@@ -22,6 +23,7 @@ public class Bug extends WorldObject {
 		super(4);
 		this.maxSpeed = 4.0f;
 		this.primaryStage = primaryStage;
+		this.setHungerLevel((int)(Math.random()* 1000));
 		this.setTranslateX(Math.random()* 1200 );
 		this.setTranslateY(Math.random()* 800 );
 		this.setSenseRange(200);
@@ -82,13 +84,23 @@ public class Bug extends WorldObject {
 	public void navigation() {
 
 	}
+	
+	public int getHungerLevel() {
+		return this.hungerLevel;
+	}
+	public void setHungerLevel(int hungerLevel) {
+		this.hungerLevel = hungerLevel;
+	}
 
 	//updatmethod
 	public void update(ArrayList<WorldObject> allObjectList) {
+		setHungerLevel(hungerLevel--);
 		sense(allObjectList);
 		decideAction(allObjectList);
 		//		moveRandomly(allObjectList);
 		checkInBounds();
+		checkReach(allObjectList);
+		eat(allObjectList);
 	}
 
 
@@ -175,7 +187,7 @@ public class Bug extends WorldObject {
 
 	//finds all objects with in senserange
 	//and decides which type of movement is required?
-	public void sense(ArrayList<WorldObject> allObjectList) { //should this be in bug class instead?
+	public void sense(ArrayList<WorldObject> allObjectList) { 
 		//first check all objects to see which are in range
 		sensedObjects.clear();
 		for (WorldObject d: allObjectList) {
@@ -204,8 +216,10 @@ public class Bug extends WorldObject {
 	}
 
 	public void decideAction(ArrayList<WorldObject> allObjectList) {
+		hungerLevel--;
 		//need to sort by porximity
 		//insert others as add more classes
+		if(getHungerLevel()<100) {		//if hunger level less than 25 search for food
 		if (sensedObjects.isEmpty()) {
 			moveRandomly(allObjectList);
 		} else if(sensedFoodBoolean()){
@@ -218,8 +232,11 @@ public class Bug extends WorldObject {
 			}
 		} else {
 			moveRandomly(allObjectList);
-			//				break;
 		}
+		} else {
+			moveRandomly(allObjectList);
+		}
+		
 
 	}
 	
@@ -268,9 +285,16 @@ public class Bug extends WorldObject {
 		moveBug(allObjectList);		
 
 	}
-
-
-
+	
+	public void eat(ArrayList<WorldObject> allObjectList) {
+		checkReach(allObjectList);
+		for (WorldObject w: getReachableObjects()) {
+			if(w instanceof Plant) {
+				((Plant) w).setSize(((Plant) w).getSize()-1);
+				this.setHungerLevel(hungerLevel + 10);
+			}
+		}
+	}
 
 
 
