@@ -208,20 +208,30 @@ public class Bug extends WorldObject {
 		//insert others as add more classes
 		if (sensedObjects.isEmpty()) {
 			moveRandomly(allObjectList);
-		} else {
+		} else if(sensedFoodBoolean()){
 			for (WorldObject w: sensedObjects) {
 				if (w instanceof Plant) {
 					moveToward(w, allObjectList);
 					break;
 				}
-				else {
-					moveRandomly(allObjectList);
-					//				break;
-				}
+				
 			}
+		} else {
+			moveRandomly(allObjectList);
+			//				break;
 		}
 
 	}
+	
+	public boolean sensedFoodBoolean() {
+		for (WorldObject w: sensedObjects) {
+			if (w instanceof Plant) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
 	//SHould try more than just altering direction?
 	public void moveToward(WorldObject w, ArrayList<WorldObject> allObjectList) {
 		//get position and move toward object

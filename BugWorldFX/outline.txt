@@ -10,3 +10,7 @@ Scenes
 			-End of simulation summary screen
 		-past metrics screen
 		
+		
+Issue getting bugs to find food, moving too quickly or only wanting one bug to go for
+	- had to ensure only moved once if food found not once for every check
+	

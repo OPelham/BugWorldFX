@@ -154,7 +154,7 @@ public class SetUp extends Application {
 			simulationSection.getChildren().add(plantToAdd);		//adds node so will be displayed
 		}
 		// add obstacles to arraylist
-		for (int i = 0; i < 10; i++) {
+		for (int i = 0; i < 0; i++) {
 			final Obstacle obstacleToAdd = new Obstacle();
 			allObjectList.add(obstacleToAdd);
 			simulationSection.getChildren().add(obstacleToAdd);		//adds node so will be displayed
