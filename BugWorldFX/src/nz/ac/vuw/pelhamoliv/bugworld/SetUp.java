@@ -142,19 +142,19 @@ public class SetUp extends Application {
 		allObjectList.clear();			//clears here so that upon reset past list in not carried over
 		simulationSection.getChildren().clear();
 		//add bugs to arraylist
-		for (int i = 0; i < 2; i++) {
+		for (int i = 0; i < 10; i++) {
 			final Bug bugToAdd = new Bug(primaryStage);
 			allObjectList.add(bugToAdd);
 			simulationSection.getChildren().add(bugToAdd);			//adds node so will be displayed
 		}
 		// add plants to arraylist
-		for (int i = 0; i < 2; i++) {
+		for (int i = 0; i < 10; i++) {
 			final Plant plantToAdd = new Plant();
 			allObjectList.add(plantToAdd);
 			simulationSection.getChildren().add(plantToAdd);		//adds node so will be displayed
 		}
 		// add obstacles to arraylist
-		for (int i = 0; i < 1; i++) {
+		for (int i = 0; i < 10; i++) {
 			final Obstacle obstacleToAdd = new Obstacle();
 			allObjectList.add(obstacleToAdd);
 			simulationSection.getChildren().add(obstacleToAdd);		//adds node so will be displayed

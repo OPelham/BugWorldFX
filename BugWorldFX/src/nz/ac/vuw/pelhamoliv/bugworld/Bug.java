@@ -190,8 +190,8 @@ public class Bug extends WorldObject {
 	public void checkRange(WorldObject d) { // needs refining
 
 		//use pythagoras for determining if collision
-		double deltaX = (this.getCenterX() + this.getTranslateX()) - (d.getCenterX() + d.getTranslateX()) ;
-		double deltaY = (this.getCenterY() + this.getTranslateY()) - (d.getCenterY() + d.getTranslateY());
+		double deltaX = (this.getTranslateX()) - (d.getTranslateX()) ;
+		double deltaY = (this.getTranslateY()) - (d.getTranslateY());
 		//now see if distance between 2 is less than the two radii + sense range
 		double distance = (Math.sqrt ((deltaX * deltaX) + (deltaY * deltaY)) ) - this.getRadius() - d.getRadius();
 		double minDistance =  this.getSenseRange() + d.getRadius() + this.getRadius() ;
@@ -206,47 +206,47 @@ public class Bug extends WorldObject {
 	public void decideAction(ArrayList<WorldObject> allObjectList) {
 		//need to sort by porximity
 		//insert others as add more classes
-		for (WorldObject w: sensedObjects) {
-			if (w instanceof Plant && w!=this) {
-				System.out.println("found food");
-				moveToward(w, allObjectList);
-				break;
-			}
-			else {
-				moveRandomly(allObjectList);
-				break;
-			}
-
-		}
 		if (sensedObjects.isEmpty()) {
 			moveRandomly(allObjectList);
+		} else {
+			for (WorldObject w: sensedObjects) {
+				if (w instanceof Plant) {
+					moveToward(w, allObjectList);
+					break;
+				}
+				else {
+					moveRandomly(allObjectList);
+					//				break;
+				}
+			}
 		}
+
 	}
 	//SHould try more than just altering direction?
 	public void moveToward(WorldObject w, ArrayList<WorldObject> allObjectList) {
 		//get position and move toward object
 		double relXPos = (w.getTranslateX() - this.getTranslateX()); //establish if target on right or left of bug
 		double relYPos = (w.getTranslateY() - this.getTranslateY());
-//		
-		
+		//		
+
 		if(relXPos > 0) {	//if object is to the right
 			setDx(maxSpeed);	//set movement to max to right
-//			
+			//			
 		}
-		
+
 		if(relXPos < 0) {	//object is to the left
 			setDx(-maxSpeed);	//set movement to max to left
 		}
-		
+
 		if(relYPos > 0) {	//if object is to the right
 			setDy(maxSpeed);	//set movement to max to right
 		}
-		
+
 		if(relYPos < 0) {	//object is to the left
 			setDy(-maxSpeed);	//set movement to max to left
 		}
-		
-//		
+
+		//		
 		//capping speed
 		if (this.dx > maxSpeed) {
 			this.dx = maxSpeed;
