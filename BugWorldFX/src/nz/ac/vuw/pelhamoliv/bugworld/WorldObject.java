@@ -2,10 +2,6 @@ package nz.ac.vuw.pelhamoliv.bugworld;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.SortedMap;
-
-import javafx.collections.transformation.SortedList;
 import javafx.scene.shape.Circle;
 
 /**WorldObject class is the parent class for all objects used in the simulation
@@ -18,7 +14,6 @@ import javafx.scene.shape.Circle;
 public class WorldObject extends Circle{
 	//fields
 	private List<WorldObject> reachableObjects = new ArrayList<WorldObject>(); //any objects in range
-	//need way of sorting this by distance
 
 	//constructors
 	public WorldObject() {
@@ -28,16 +23,15 @@ public class WorldObject extends Circle{
 		super();
 		this.setRadius(radius);
 	}
+	
+	//accessor methods
 	public List<WorldObject> getReachableObjects() {
 		return reachableObjects;
 	}
-	public void setReachableObjects(List<WorldObject> reachableObjects) {
-		this.reachableObjects = reachableObjects;
-	}
 
 	//establishes weather a collsion has occured given potential move coordinates
-	//potentially come back and relate this to eating/being eaten or move to bug class as these move...
-	//use pythagoras for determining if collision
+	//put in this class for the potential of checking for validity of position during initial spawn
+	//ie all classes will need to check
 	public boolean conductCollision(double potnX, double potnY, WorldObject o) {
 		double deltaX = o.getCenterX() + o.getTranslateX() - potnX;	//calculates difference on x plane of the two objects
 		double deltaY = o.getCenterY() + o.getTranslateY() - potnY; //calculates difference on x plane of the two objects
@@ -52,7 +46,7 @@ public class WorldObject extends Circle{
 	//need to find way of sorting by distance
 	public boolean checkCollisions(double potnX, double potnY, ArrayList<WorldObject> allObjectList) {
 		for (WorldObject d: allObjectList) {
-			if(this!=d && d.isVisible()) {
+			if(this!=d && d.isVisible()) {	//not dead
 				if(this.conductCollision(potnX, potnY, d)) { //see if this object collides with 
 					return true;
 				}
@@ -61,29 +55,24 @@ public class WorldObject extends Circle{
 		return false;
 	}
 
-
-
-	//checks within interactable area for interactable objects
+	//checks within interactable area for interactable objects eg for eating
+	//this range is 2 wider than objects radius
 	public void checkReach(ArrayList<WorldObject> allObjectList) {
-		reachableObjects.clear();
+		reachableObjects.clear();	//clears those in range from last move
 		for(WorldObject d: allObjectList) {
-			if(d.isVisible()) {
-				double deltaX = (this.getTranslateX()) - (d.getTranslateX()) ;
-				double deltaY = (this.getTranslateY()) - (d.getTranslateY());
-				//now see if distance between 2 is less than the two radii + sense range
+			if(d.isVisible()) {	//not dead
+				//use pythagoras to establish if within range
+				double deltaX = (this.getTranslateX()) - (d.getTranslateX()) ;	//gets x component of distance
+				double deltaY = (this.getTranslateY()) - (d.getTranslateY());	//gets y component of distance
+				//now use pythagoras to see actual distance
 				double distance = (Math.sqrt ((deltaX * deltaX) + (deltaY * deltaY)) ) - this.getRadius() - d.getRadius();
+				//now see if distance between 2 is less than the two radii + sense range
 				double minDistance =  2 + d.getRadius() + this.getRadius() ;
 				if(distance < minDistance) {
-					//			if(d instanceof Bug) {
-					reachableObjects.add(d);
+					reachableObjects.add(d);	//if true add to reachable object collection
 				}
 			}
-
-			//				System.out.println("found within range, distance: " + distance);
-			//			}
 		}
 	}
-
-
 
 }

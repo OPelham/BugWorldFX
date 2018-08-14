@@ -27,7 +27,7 @@ public class Plant extends WorldObject{
 	
 	public void update() {
 		die();
-		double growthChance = Math.random()*50;	//move to method
+		double growthChance = Math.random()*200;	//move to method
 		if(isVisible() && growthChance < 1) {
 			size++;
 		}

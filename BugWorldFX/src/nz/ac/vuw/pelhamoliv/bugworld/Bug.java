@@ -16,6 +16,10 @@ public class Bug extends WorldObject {
 	private List<WorldObject> sensedObjects = new ArrayList<WorldObject>(); //need way to sort
 	//could make sort interface and sort by distance to this object? maybe make it a queue instead?
 
+	public List<WorldObject> getSensedObjects() {
+		return sensedObjects;
+	}
+
 	private float dx = -3.5f; 
 	private float dy = -3.5f;
 
@@ -81,12 +85,6 @@ public class Bug extends WorldObject {
 		this.senseRange = senseRange;
 	}
 
-
-	//a class to choose direction to take
-	public void navigation() {
-
-	}
-	
 	public int getHungerLevel() {
 		return this.hungerLevel;
 	}
@@ -211,6 +209,7 @@ public class Bug extends WorldObject {
 		}
 	}
 
+	//remove body? make Abstract?
 	public void decideAction(ArrayList<WorldObject> allObjectList) {
 		//need to sort by porximity
 		//insert others as add more classes
