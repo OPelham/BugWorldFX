@@ -38,3 +38,30 @@ Issue getting bugs to find food, moving too quickly or only wanting one bug to g
 	
 	add breeding
 	
+	public void methodname(numField fieldname, Text textname)
+	if(inputCheck(fieldname.getText()) <0) { //if input check method returns -1 then is not valid
+					textname.setText("Prey bugs: Please Enter a positive integer 0-100");
+					textname.setFill(Color.RED);
+					valid = false;	//to stop change to next scene
+				} else {
+					textname.setText("Number of prey bugs");
+					textname.setFill(Color.BLACK);
+					numPreyBug = inputCheck(fieldname.getText());	//add outputs to field numPreyBug for use in populate world method
+				}
+	
+	
+	public void generateobjects<t extends WorldObject>(int numOfObject, Scene scene,ImagePattern fill) 
+	for (int i = 0; i < numOfObstacle; i++) {	//adds number given by user in startup screen
+			final Obstacle obstacleToAdd = new Obstacle(simulationScene);
+			obstacleToAdd.setFill(obstacleFill);	// adds image fill
+			allObjectList.add(obstacleToAdd);
+			simulationSection.getChildren().add(obstacleToAdd);		//adds node so will be displayed
+		}
+		
+		
+		
+		
+		
+		
+		
+	

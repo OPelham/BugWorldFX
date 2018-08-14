@@ -1,7 +1,6 @@
 package nz.ac.vuw.pelhamoliv.bugworld;
 
 import java.util.ArrayList;
-
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
@@ -41,6 +40,8 @@ public class SetUp extends Application {
 	private int windowWidth = 1200;
 	private int windowHeight = 800;
 	private int numPreyBug;		//the number of this object to include in simulation
+	
+
 	private int numPredatorBug;
 	private int numOfPlant;
 	private int numOfObstacle;
@@ -50,7 +51,7 @@ public class SetUp extends Application {
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 		//loading in images and setting as image pattern
-		
+
 		Image dirtImage = new Image("/dirtIm.jpg");
 		BackgroundImage dirtFill = new BackgroundImage(dirtImage, BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);
 		Image plantImage = new Image("/PlantIm.png");		//plant image
@@ -167,60 +168,77 @@ public class SetUp extends Application {
 			public void handle(ActionEvent arg0) {
 				//get users preferd number of objects
 
-				//MOVE THIS TO A METHOD would need alot of parameters, may not be worth it
-				Boolean valid = true; // used to check validity of input
-
-				//prey bugs check
-				if(inputCheck(preyBugNumField.getText()) <0) { //if input check method returns -1 then is not valid
-					preyBugNumText.setText("Prey bugs: Please Enter a positive integer 0-100");
-					preyBugNumText.setFill(Color.RED);
-					valid = false;	//to stop change to next scene
-				} else {
-					preyBugNumText.setText("Number of prey bugs");
-					preyBugNumText.setFill(Color.BLACK);
-					numPreyBug = inputCheck(preyBugNumField.getText());	//add outputs to field numPreyBug for use in populate world method
-				}
-
-				//preator bug check
-				if(inputCheck(predatorBugNumField.getText()) <0) { //if input check method returns -1 then is not valid
-					predatorBugNumText.setText("Predator bugs: Please Enter a positive integer 0-100");
-					predatorBugNumText.setFill(Color.RED);
-					valid = false;	//to stop change to next scene
-				} else {
-					predatorBugNumText.setText("Number of predator bugs");
-					predatorBugNumText.setFill(Color.BLACK);
-					numPredatorBug = inputCheck(predatorBugNumField.getText());	//add outputs to field numPreyBug for use in populate world method
-				}
-
-				//plant check
-				if(inputCheck(plantNumField.getText()) <0) { //if input check method returns -1 then is not valid
-					plantNumText.setText("Plants: Please Enter a positive integer 0-100");
-					plantNumText.setFill(Color.RED);
-					valid = false;	//to stop change to next scene
-				} else {
-					plantNumText.setText("Number of plants");
-					plantNumText.setFill(Color.BLACK);
-					numOfPlant = inputCheck(plantNumField.getText());	//add outputs to field numPreyBug for use in populate world method
-				}
-
-				//obstacle check
-				if(inputCheck(obstacleNumField.getText()) <0) { //if input check method returns -1 then is not valid
-					obstacleNumText.setText("Obstacles: Please Enter a positive integer 0-100");
-					obstacleNumText.setFill(Color.RED);
-					valid = false;	//to stop change to next scene
-				} else {
-					obstacleNumText.setText("Number of obstacles");
-					obstacleNumText.setFill(Color.BLACK);
-					numOfObstacle = inputCheck(obstacleNumField.getText());	//add outputs to field numPreyBug for use in populate world method
-				}
-
-				//change to correct scene for simulation if all input valid
-				if (valid == true) {
+				//checks on validity of all text field input and takes input and sets number of objects for each class (in method)
+				int preyBugCheck = methodName(preyBugNumField, preyBugNumText, "Prey bugs: Please Enter a positive integer 0-100", "Number of prey bugs");
+				int predatorBugCheck =methodName(predatorBugNumField, predatorBugNumText, "Predator bugs: Please Enter a positive integer 0-100", "Number of predator bugs");
+				int plantCheck = methodName(plantNumField, plantNumText, "Plants: Please Enter a positive integer 0-100", "Number of plants");
+				int obstacleCheck = methodName(obstacleNumField, obstacleNumText, "Obstacles: Please Enter a positive integer 0-100", "Number of obstacles");
+				if(preyBugCheck >0 && predatorBugCheck >0 && plantCheck >0 && obstacleCheck >0) {
+					//if all true then change to next scene and populate world
+					setNumPreyBug(preyBugCheck);
+					setNumPredatorBug(predatorBugCheck);
+					setNumOfPlant(plantCheck);
+					setNumOfObstacle(obstacleCheck);
 					primaryStage.setScene(simulationScene);			//changeing stage to display/run simulation screen
-					populateWorld(primaryStage, simulationSection, plantFill, bugFill, obstacleFill, predatorBugFill);		//populating world
+					populateWorld(simulationScene, simulationSection, plantFill, bugFill, obstacleFill, predatorBugFill);		//populating world
 					//				primaryStage.show();
 					timeline.play();
 				}
+				
+				
+
+
+//				if(inputCheck(preyBugNumField.getText()) <0) { //if input check method returns -1 then is not valid
+//					preyBugNumText.setText("Prey bugs: Please Enter a positive integer 0-100");
+//					preyBugNumText.setFill(Color.RED);
+//					valid = false;	//to stop change to next scene
+//				} else {
+//					preyBugNumText.setText("Number of prey bugs");
+//					preyBugNumText.setFill(Color.BLACK);
+//					numPreyBug = inputCheck(preyBugNumField.getText());	//add outputs to field numPreyBug for use in populate world method
+//				}
+//
+//				//preator bug check
+//				if(inputCheck(predatorBugNumField.getText()) <0) { //if input check method returns -1 then is not valid
+//					predatorBugNumText.setText("Predator bugs: Please Enter a positive integer 0-100");
+//					predatorBugNumText.setFill(Color.RED);
+//					valid = false;	//to stop change to next scene
+//				} else {
+//					predatorBugNumText.setText("Number of predator bugs");
+//					predatorBugNumText.setFill(Color.BLACK);
+//					numPredatorBug = inputCheck(predatorBugNumField.getText());	//add outputs to field numPreyBug for use in populate world method
+//				}
+//
+//				//plant check
+//				if(inputCheck(plantNumField.getText()) <0) { //if input check method returns -1 then is not valid
+//					plantNumText.setText("Plants: Please Enter a positive integer 0-100");
+//					plantNumText.setFill(Color.RED);
+//					valid = false;	//to stop change to next scene
+//				} else {
+//					plantNumText.setText("Number of plants");
+//					plantNumText.setFill(Color.BLACK);
+//					numOfPlant = inputCheck(plantNumField.getText());	//add outputs to field numPreyBug for use in populate world method
+//				}
+//
+//				//obstacle check
+//				if(inputCheck(obstacleNumField.getText()) <0) { //if input check method returns -1 then is not valid
+//					obstacleNumText.setText("Obstacles: Please Enter a positive integer 0-100");
+//					obstacleNumText.setFill(Color.RED);
+//					valid = false;	//to stop change to next scene
+//				} else {
+//					obstacleNumText.setText("Number of obstacles");
+//					obstacleNumText.setFill(Color.BLACK);
+//					numOfObstacle = inputCheck(obstacleNumField.getText());	//add outputs to field numPreyBug for use in populate world method
+//				}
+//
+//				//change to correct scene for simulation if all input valid
+//				if (valid == true) {
+//					primaryStage.setScene(simulationScene);			//changeing stage to display/run simulation screen
+//					populateWorld(simulationScene, simulationSection, plantFill, bugFill, obstacleFill, predatorBugFill);		//populating world
+//					//				primaryStage.show();
+//					timeline.play();
+//				}
+				
 			}
 		});
 
@@ -245,7 +263,7 @@ public class SetUp extends Application {
 		restart.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
-				populateWorld(primaryStage, simulationSection, plantFill, bugFill, obstacleFill, predatorBugFill);		//repopulates world on reset
+				populateWorld(simulationScene, simulationSection, plantFill, bugFill, obstacleFill, predatorBugFill);		//repopulates world on reset
 			}
 		});
 
@@ -270,35 +288,35 @@ public class SetUp extends Application {
 	//This method Populates the world with objects, 
 	//takes the stage to make bug which takes this as a parameter in order to know boundaries
 	//takes the pane to clear old contents upon restart button action
-	public void populateWorld(Stage primaryStage, Pane simulationSection, ImagePattern plantFill, ImagePattern bugFill, ImagePattern obstacleFill, ImagePattern predatorBugFill) {
+	public void populateWorld(Scene simulationScene, Pane simulationSection, ImagePattern plantFill, ImagePattern bugFill, ImagePattern obstacleFill, ImagePattern predatorBugFill) {
 
 		allObjectList.clear();			//clears here so that upon reset past list in not carried over
 		simulationSection.getChildren().clear();
-		
+
 		// add obstacles to arraylist
 		for (int i = 0; i < numOfObstacle; i++) {	//adds number given by user in startup screen
-			final Obstacle obstacleToAdd = new Obstacle();
+			final Obstacle obstacleToAdd = new Obstacle(simulationScene);
 			obstacleToAdd.setFill(obstacleFill);	// adds image fill
 			allObjectList.add(obstacleToAdd);
 			simulationSection.getChildren().add(obstacleToAdd);		//adds node so will be displayed
 		}
 		// add plants to arraylist
 		for (int i = 0; i < numOfPlant; i++) {		//adds number given by user in startup screen
-			final Plant plantToAdd = new Plant();
+			final Plant plantToAdd = new Plant(simulationScene);
 			plantToAdd.setFill(plantFill);	// adds image fill
 			allObjectList.add(plantToAdd);
 			simulationSection.getChildren().add(plantToAdd);		//adds node so will be displayed
 		}
 		//add preybugs to arraylist
 		for (int i = 0; i < numPreyBug; i++) {		//adds number given by user in startup screen
-			final PreyBug bugToAdd = new PreyBug(primaryStage);
+			final PreyBug bugToAdd = new PreyBug(simulationScene);
 			bugToAdd.setFill(bugFill);	// adds image fill
 			allObjectList.add(bugToAdd);
 			simulationSection.getChildren().add(bugToAdd);			//adds node so will be displayed
 		}
 		//add predatorbugs to arraylist
 		for (int i = 0; i < numPredatorBug; i++) {		//adds number given by user in startup screen
-			final PredatorBug bugToAdd = new PredatorBug(primaryStage);
+			final PredatorBug bugToAdd = new PredatorBug(simulationScene);
 			bugToAdd.setFill(predatorBugFill);	// adds image fill
 			allObjectList.add(bugToAdd);
 			simulationSection.getChildren().add(bugToAdd);			//adds node so will be displayed
@@ -314,7 +332,7 @@ public class SetUp extends Application {
 			if (i>100) {
 				i = -1;						//otherwise return -1
 			} 
-			
+
 		}  
 		catch(NumberFormatException nfe)  	//if cant be made an int then return -1
 		{  
@@ -322,10 +340,73 @@ public class SetUp extends Application {
 		}  
 		return i;  
 	}
-	
+
+	//needs generic class?
+	//	public void generateObjects<T extends WorldObject>(int numOfObject, Scene scene,ImagePattern fill){
+	//		for (int i = 0; i < numOfObject; i++) {	//adds number given by user in startup screen
+	//			final Obstacle obstacleToAdd = new Obstacle(scene);
+	//			obstacleToAdd.setFill(obstacleFill);	// adds image fill
+	//			allObjectList.add(obstacleToAdd);
+	//			simulationSection.getChildren().add(obstacleToAdd);		//adds node so will be displayed
+	//		}
+	//	}
+
+	public int methodName(TextField fieldname, Text textname, String errorMessage, String defaultMessage) {
+		if(inputCheck(fieldname.getText()) <0) { //if input check method returns -1 then is not valid
+			textname.setText(errorMessage);
+			textname.setFill(Color.RED);
+			return -1;
+		} else {
+			textname.setText(defaultMessage);
+			textname.setFill(Color.BLACK);
+			numPreyBug = inputCheck(fieldname.getText());	//add outputs to field numPreyBug for use in populate world method
+			return numPreyBug;
+		}
+	}
+
 	public static void main(String[] args) {
 		launch(args);
 
+	}
+	
+	//accessor methods
+	public int getNumPreyBug() {
+		return numPreyBug;
+	}
+
+
+	public void setNumPreyBug(int numPreyBug) {
+		this.numPreyBug = numPreyBug;
+	}
+
+
+	public int getNumPredatorBug() {
+		return numPredatorBug;
+	}
+
+
+	public void setNumPredatorBug(int numPredatorBug) {
+		this.numPredatorBug = numPredatorBug;
+	}
+
+
+	public int getNumOfPlant() {
+		return numOfPlant;
+	}
+
+
+	public void setNumOfPlant(int numOfPlant) {
+		this.numOfPlant = numOfPlant;
+	}
+
+
+	public int getNumOfObstacle() {
+		return numOfObstacle;
+	}
+
+
+	public void setNumOfObstacle(int numOfObstacle) {
+		this.numOfObstacle = numOfObstacle;
 	}
 
 }

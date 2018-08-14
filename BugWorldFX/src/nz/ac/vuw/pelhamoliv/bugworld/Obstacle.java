@@ -1,5 +1,7 @@
 package nz.ac.vuw.pelhamoliv.bugworld;
 
+import javafx.scene.Scene;
+
 /**This class creates an obstable
  * 
  * @author pelhamoliv
@@ -7,8 +9,8 @@ package nz.ac.vuw.pelhamoliv.bugworld;
  */
 public class Obstacle extends WorldObject{
 	//constructor
-	public Obstacle() {
-		super(Math.random()*50+10);	//set radius
+	public Obstacle(Scene scene) {
+		super(Math.random()*50+10, scene);	//set radius
 		
 	}
 

@@ -2,7 +2,7 @@ package nz.ac.vuw.pelhamoliv.bugworld;
 
 import java.util.ArrayList;
 import java.util.List;
-import javafx.stage.Stage;
+import javafx.scene.Scene;
 
 /**Bug is the superclass of preybug and predator bug
  * holds all common methods of these two
@@ -14,7 +14,7 @@ import javafx.stage.Stage;
 
 public abstract class Bug extends WorldObject {
 	//fields
-	private Stage primaryStage;		//for knowing boundaries
+	private Scene scene;		//for knowing boundaries
 	private float maxSpeed;			//max allowed speed 
 	private double senseRange;		//range in which bug is aware of other objects
 	private int hungerLevel;		//current level of hunger (used to determine if need food and if dies)
@@ -23,10 +23,10 @@ public abstract class Bug extends WorldObject {
 	private List<WorldObject> sensedObjects = new ArrayList<WorldObject>(); //collection of all objects within sense range that are alive
 
 	//constructor
-	public Bug(Stage primaryStage) {
-		super(10);	//sets Radius calling parent contructor
+	public Bug(Scene scene) {
+		super(10, scene);	//sets Radius calling parent contructor
 		this.maxSpeed = 4.0f;
-		this.primaryStage = primaryStage;
+		this.scene = scene;
 		this.setHungerLevel(10);
 //		this.setTranslateX(Math.random()* 1200 );
 //		this.setTranslateY(Math.random()* 800 );
@@ -155,8 +155,8 @@ public abstract class Bug extends WorldObject {
 	public void checkInBounds() {
 		//four checks of >= border (dont forget radius) l/r/t/b then move to be inside
 		//if outside rhs bound move to closest x pos which is valid
-		if (this.getCenterX() + this.getTranslateX() + this.getRadius() > (primaryStage.getWidth()-18)) {
-			this.setTranslateX((primaryStage.getWidth()-18)-1 - this.getRadius() - this.getCenterX());
+		if (this.getCenterX() + this.getTranslateX() + this.getRadius() > (scene.getWidth())) {
+			this.setTranslateX((scene.getWidth())-1 - this.getRadius() - this.getCenterX());
 			//could also set dx in direction away from wall
 		}
 		//if outside lhs bound move to closest x pos which is valid
@@ -168,8 +168,8 @@ public abstract class Bug extends WorldObject {
 			this.setTranslateY(1 + this.getRadius() - this.getCenterY()); //sets CenterX position to radius +1
 		}
 		//if outside bottom bound move to closest y pos which is valid
-		if (this.getCenterY() + this.getTranslateY() + this.getRadius() > (primaryStage.getHeight()-80)) {
-			this.setTranslateY((primaryStage.getHeight()-80) - this.getRadius() - this.getCenterY());
+		if (this.getCenterY() + this.getTranslateY() + this.getRadius() > (scene.getHeight()) - 25) { //-25 for top border pane
+			this.setTranslateY((scene.getHeight()) - this.getRadius() - this.getCenterY() -25);
 		}
 
 	}

@@ -3,6 +3,7 @@ package nz.ac.vuw.pelhamoliv.bugworld;
 import java.util.ArrayList;
 import java.util.List;
 import javafx.scene.shape.Circle;
+import javafx.scene.Scene;
 
 /**WorldObject class is the parent class for all objects used in the simulation
  * it includes - collision methods
@@ -16,16 +17,13 @@ public class WorldObject extends Circle{
 	private List<WorldObject> reachableObjects = new ArrayList<WorldObject>(); //any objects in range
 
 	//constructors
-//	public WorldObject() {	//for obs
-//		super();
-//	}
-	public WorldObject(double radius) {
+	public WorldObject(double radius, Scene scene) {
 		super();
 		this.setRadius(radius);
 		//could modify following to take scene
 		//following sets position between bounds of scene (with radius in bounds)
-		this.setTranslateX(Math.random()* (1140-this.getRadius()*2) + this.getRadius() );	//set location
-		this.setTranslateY(Math.random()* (700 - this.getRadius()*2) + this.getRadius() );	//set location
+		this.setTranslateX(Math.random()* (scene.getWidth()-this.getRadius()*2) + this.getRadius() );	//set location
+		this.setTranslateY(Math.random()* ((scene.getHeight()-25) - this.getRadius()*2) + this.getRadius() );	//set location
 	}
 	
 	//accessor methods

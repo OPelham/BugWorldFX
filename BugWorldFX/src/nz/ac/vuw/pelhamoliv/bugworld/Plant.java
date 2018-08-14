@@ -1,5 +1,6 @@
 package nz.ac.vuw.pelhamoliv.bugworld;
 
+import javafx.scene.Scene;
 
 /**plant class that grows and is eaten for food by prey bugs
  * 
@@ -11,8 +12,8 @@ public class Plant extends WorldObject{
 	private int foodQuantity; //this is the value of food this tree represents (how much left to eat)
 
 	//constructor
-	public Plant() {
-		super(50);		//calls parent constructor with radius 50
+	public Plant(Scene scene) {
+		super(50, scene);		//calls parent constructor with radius 50
 		this.setSize((int)(Math.random()*5+1));	//setting size
 //		this.setTranslateX(Math.random()* 1100 + 25 );	//set initial location
 //		this.setTranslateY(Math.random()* 735 + 25 );

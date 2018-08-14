@@ -2,7 +2,7 @@ package nz.ac.vuw.pelhamoliv.bugworld;
 
 import java.util.ArrayList;
 
-import javafx.stage.Stage;
+import javafx.scene.Scene;
 /**prey bug eats plants, eaten by predaor bugs
  * 
  * 
@@ -12,8 +12,8 @@ import javafx.stage.Stage;
 		
 public class PreyBug extends Bug{
 
-	public PreyBug(Stage primaryStage) {
-		super(primaryStage);
+	public PreyBug(Scene scene) {
+		super(scene);
 		//could change so could feed in max speed etc as parameters to make customisable subtypes
 	}
 	//this overrides bugs method 
