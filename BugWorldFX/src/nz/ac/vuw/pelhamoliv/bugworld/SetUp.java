@@ -13,6 +13,11 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundImage;
+import javafx.scene.layout.BackgroundPosition;
+import javafx.scene.layout.BackgroundRepeat;
+import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
@@ -41,12 +46,13 @@ public class SetUp extends Application {
 	private int numOfObstacle;
 	private final ArrayList<WorldObject> allObjectList = new ArrayList<>();	//collection storing all objects in simulation
 
-
-
 	//this is the main entry point for the application
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 		//loading in images and setting as image pattern
+		
+		Image dirtImage = new Image("/dirtIm.jpg");
+		BackgroundImage dirtFill = new BackgroundImage(dirtImage, BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);
 		Image plantImage = new Image("/PlantIm.png");		//plant image
 		ImagePattern plantFill = new ImagePattern(plantImage);
 		Image bugImage = new Image("/PreyBug.png");			//preyBug image
@@ -122,7 +128,7 @@ public class SetUp extends Application {
 		buttonSection.getChildren().add(returnbtn);
 		buttonSection.setStyle("-fx-background-color: #464646");	//sets background colour of button section
 
-		simulationSection.setStyle("-fx-background-color: #ccd3e0");	//changing background of simulation section
+		simulationSection.setBackground(new Background(dirtFill));	//changing background of simulation section
 		//assigning section of layout to main borderpane 
 		mainSimulationLayout.setCenter(simulationSection);
 		mainSimulationLayout.setTop(buttonSection);
@@ -161,7 +167,7 @@ public class SetUp extends Application {
 			public void handle(ActionEvent arg0) {
 				//get users preferd number of objects
 
-				//MOVE THIS TO A METHOD
+				//MOVE THIS TO A METHOD would need alot of parameters, may not be worth it
 				Boolean valid = true; // used to check validity of input
 
 				//prey bugs check
@@ -268,6 +274,7 @@ public class SetUp extends Application {
 
 		allObjectList.clear();			//clears here so that upon reset past list in not carried over
 		simulationSection.getChildren().clear();
+		
 		// add obstacles to arraylist
 		for (int i = 0; i < numOfObstacle; i++) {	//adds number given by user in startup screen
 			final Obstacle obstacleToAdd = new Obstacle();
@@ -315,11 +322,7 @@ public class SetUp extends Application {
 		}  
 		return i;  
 	}
-
-	public void textFieldSetup() {
-		//to add method to shorten vailidity check of input fields
-	}
-
+	
 	public static void main(String[] args) {
 		launch(args);
 

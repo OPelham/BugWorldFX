@@ -30,6 +30,7 @@ Issue getting bugs to find food, moving too quickly or only wanting one bug to g
 	when interacting with objects do check for vissibility first
 	
 	group would allow for easy remove and set opacity
+	group.getchildren would give a list that could iterate over...
 	
 	issues with bug spawninng under rock or plant or plant growing over
 	need to eventually add collision detection to for use in constructor

@@ -16,18 +16,24 @@ public class WorldObject extends Circle{
 	private List<WorldObject> reachableObjects = new ArrayList<WorldObject>(); //any objects in range
 
 	//constructors
-	public WorldObject() {
-		super();
-	}
+//	public WorldObject() {	//for obs
+//		super();
+//	}
 	public WorldObject(double radius) {
 		super();
 		this.setRadius(radius);
+		//could modify following to take scene
+		//following sets position between bounds of scene (with radius in bounds)
+		this.setTranslateX(Math.random()* (1140-this.getRadius()*2) + this.getRadius() );	//set location
+		this.setTranslateY(Math.random()* (700 - this.getRadius()*2) + this.getRadius() );	//set location
 	}
 	
 	//accessor methods
 	public List<WorldObject> getReachableObjects() {
 		return reachableObjects;
 	}
+	
+	//could make the following two methods into one method
 
 	//establishes weather a collsion has occured given potential move coordinates
 	//put in this class for the potential of checking for validity of position during initial spawn

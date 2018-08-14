@@ -4,14 +4,19 @@ import java.util.ArrayList;
 
 import javafx.stage.Stage;
 
+/**predator bug eats preybugs,
+ * 
+ * @author pelhamoliv
+ *
+ */
 public class PredatorBug extends Bug{
 
 	public PredatorBug(Stage primaryStage) {
 		super(primaryStage);
-		// TODO Auto-generated constructor stub
+		//could change so could feed in max speed etc as parameters to make customisable subtypes
 	}
 
-	//this overrides bugs method - should i make bug abstract?
+	//this overrides bugs method
 	public void decideAction(ArrayList<WorldObject> allObjectList) {
 		if(getHungerLevel()<4) {		//if hunger level less than 4 search for food
 			if (getSensedObjects().isEmpty()) {
@@ -33,7 +38,7 @@ public class PredatorBug extends Bug{
 	}
 	
 	//overrides bug method 
-	public boolean sensedFoodBoolean() {
+	public boolean sensedFoodBoolean() {	//go through sensed objects array and, if any are food return true
 		for (WorldObject w: getSensedObjects()) {
 			if (w instanceof PreyBug && w.isVisible()) {
 				return true;
@@ -42,7 +47,7 @@ public class PredatorBug extends Bug{
 		return false;
 	}
 	//overrides bug method
-	public void eat(ArrayList<WorldObject> allObjectList) {
+	public void eat(ArrayList<WorldObject> allObjectList) {		//if within-reach-collection contains food eat it
 		checkReach(allObjectList);
 		for (WorldObject w: this.getReachableObjects()) {
 			if(w instanceof PreyBug) {
@@ -52,8 +57,9 @@ public class PredatorBug extends Bug{
 		}
 	}
 	
+	//overrides bug method, align radius with hungerlevel
 	public void checkSize() {
-		this.setRadius(getHungerLevel()*2+5);
+		this.setRadius(getHungerLevel()*2+10);
 	}
 
 
