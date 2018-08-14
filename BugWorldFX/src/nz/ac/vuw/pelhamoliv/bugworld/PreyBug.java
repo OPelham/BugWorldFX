@@ -9,7 +9,7 @@ import javafx.scene.Scene;
  * @author pelhamoliv
  *
  */
-		
+
 public class PreyBug extends Bug{
 
 	public PreyBug(Scene scene) {
@@ -37,7 +37,7 @@ public class PreyBug extends Bug{
 			moveRandomly(allObjectList);
 		}
 	}
-	
+
 	public boolean sensedFoodBoolean() {		//go through sensed objects array and, if any are food return true
 		for (WorldObject w: getSensedObjects()) {
 			if (w instanceof Plant && w.isVisible()) {
@@ -46,7 +46,7 @@ public class PreyBug extends Bug{
 		}
 		return false;
 	}
-	
+
 	public void eat(ArrayList<WorldObject> allObjectList) {		//if within-reach-collection contains food eat it
 		checkReach(allObjectList);
 		for (WorldObject w: this.getReachableObjects()) {
@@ -56,13 +56,13 @@ public class PreyBug extends Bug{
 			}
 		}
 	}
-	
+
 	//will kill bug
 	public void beEaten() {
 		setHungerLevel(0);
 		setVisible(false);
 	}
-	
-	
+
+
 
 }

@@ -36,7 +36,7 @@ public class PredatorBug extends Bug{
 			moveRandomly(allObjectList);
 		}
 	}
-	
+
 	//overrides bug method 
 	public boolean sensedFoodBoolean() {	//go through sensed objects array and, if any are food return true
 		for (WorldObject w: getSensedObjects()) {
@@ -56,7 +56,7 @@ public class PredatorBug extends Bug{
 			}
 		}
 	}
-	
+
 	//overrides bug method, align radius with hungerlevel
 	public void checkSize() {
 		this.setRadius(getHungerLevel()*2+10);

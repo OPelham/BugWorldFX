@@ -15,8 +15,8 @@ public class Plant extends WorldObject{
 	public Plant(Scene scene) {
 		super(50, scene);		//calls parent constructor with radius 50
 		this.setSize((int)(Math.random()*5+1));	//setting size
-//		this.setTranslateX(Math.random()* 1100 + 25 );	//set initial location
-//		this.setTranslateY(Math.random()* 735 + 25 );
+		//		this.setTranslateX(Math.random()* 1100 + 25 );	//set initial location
+		//		this.setTranslateY(Math.random()* 735 + 25 );
 	}
 
 	//accessor methods
@@ -47,7 +47,7 @@ public class Plant extends WorldObject{
 			setSize(5);
 		}
 	}
-	
+
 	public void die() {		//move to superclass and make abstract, no as obstacles dont die?
 		if (foodQuantity ==0) {
 			this.setVisible(false);		//if no food left then set not visible. methods checking objects in world will check if visible before including this object

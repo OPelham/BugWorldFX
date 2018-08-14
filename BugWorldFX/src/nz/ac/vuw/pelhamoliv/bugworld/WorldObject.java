@@ -25,12 +25,12 @@ public class WorldObject extends Circle{
 		this.setTranslateX(Math.random()* (scene.getWidth()-this.getRadius()*2) + this.getRadius() );	//set location
 		this.setTranslateY(Math.random()* ((scene.getHeight()-25) - this.getRadius()*2) + this.getRadius() );	//set location
 	}
-	
+
 	//accessor methods
 	public List<WorldObject> getReachableObjects() {
 		return reachableObjects;
 	}
-	
+
 	//could make the following two methods into one method
 
 	//establishes weather a collsion has occured given potential move coordinates
@@ -71,7 +71,7 @@ public class WorldObject extends Circle{
 				//now use pythagoras to see actual distance
 				double distance = (Math.sqrt ((deltaX * deltaX) + (deltaY * deltaY)) ) - this.getRadius() - d.getRadius();
 				//now see if distance between 2 is less than the two radii + sense range
-				double minDistance =  2 + d.getRadius() + this.getRadius() ;
+				double minDistance =  d.getRadius() + this.getRadius() ;
 				if(distance < minDistance) {
 					reachableObjects.add(d);	//if true add to reachable object collection
 				}

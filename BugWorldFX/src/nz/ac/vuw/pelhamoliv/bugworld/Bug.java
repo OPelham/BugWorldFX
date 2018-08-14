@@ -28,8 +28,8 @@ public abstract class Bug extends WorldObject {
 		this.maxSpeed = 4.0f;
 		this.scene = scene;
 		this.setHungerLevel(10);
-//		this.setTranslateX(Math.random()* 1200 );
-//		this.setTranslateY(Math.random()* 800 );
+		//		this.setTranslateX(Math.random()* 1200 );
+		//		this.setTranslateY(Math.random()* 800 );
 		this.setSenseRange(200);
 		this.checkSize();
 		///the following randominses initial direction
@@ -87,7 +87,7 @@ public abstract class Bug extends WorldObject {
 	}
 
 	//Methods
-	
+
 	//updatmethod
 	public void update(ArrayList<WorldObject> allObjectList) {
 		makeHungry();	//first change hunger level
@@ -202,39 +202,39 @@ public abstract class Bug extends WorldObject {
 	}
 
 	public abstract void decideAction(ArrayList<WorldObject> allObjectList);
-//	{
-//		//need to sort by porximity
-//		//insert others as add more classes
-//		if(getHungerLevel()<4) {		//if hunger level less than 4 search for food
-//			if (sensedObjects.isEmpty()) {
-//				moveRandomly(allObjectList);
-//			} else if(sensedFoodBoolean()){
-//				for (WorldObject w: sensedObjects) {
-//					if (w instanceof Plant && w.isVisible()) {
-//						moveToward(w, allObjectList);
-//						break;
-//					}
-//
-//				}
-//			} else {
-//				moveRandomly(allObjectList);
-//			}
-//		} else {
-//			moveRandomly(allObjectList);
-//		}
-//
+	//	{
+	//		//need to sort by porximity
+	//		//insert others as add more classes
+	//		if(getHungerLevel()<4) {		//if hunger level less than 4 search for food
+	//			if (sensedObjects.isEmpty()) {
+	//				moveRandomly(allObjectList);
+	//			} else if(sensedFoodBoolean()){
+	//				for (WorldObject w: sensedObjects) {
+	//					if (w instanceof Plant && w.isVisible()) {
+	//						moveToward(w, allObjectList);
+	//						break;
+	//					}
+	//
+	//				}
+	//			} else {
+	//				moveRandomly(allObjectList);
+	//			}
+	//		} else {
+	//			moveRandomly(allObjectList);
+	//		}
+	//
 
-//	}
+	//	}
 
 	public abstract boolean sensedFoodBoolean(); 
-//	{
-//		for (WorldObject w: sensedObjects) {
-//			if (w instanceof Plant && w.isVisible()) {
-//				return true;
-//			}
-//		}
-//		return false;
-//	}
+	//	{
+	//		for (WorldObject w: sensedObjects) {
+	//			if (w instanceof Plant && w.isVisible()) {
+	//				return true;
+	//			}
+	//		}
+	//		return false;
+	//	}
 
 	//SHould try more than just altering direction?
 	public void moveToward(WorldObject w, ArrayList<WorldObject> allObjectList) {
@@ -276,19 +276,19 @@ public abstract class Bug extends WorldObject {
 	}
 
 	public abstract void eat(ArrayList<WorldObject> allObjectList); 
-//	{
-//		checkReach(allObjectList);
-//		for (WorldObject w: this.getReachableObjects()) {
-//			if(w instanceof Plant) {
-//				((Plant) w).beEaten();
-//				hungerLevel += 4;
-//			}
-//		}
-//	}
+	//	{
+	//		checkReach(allObjectList);
+	//		for (WorldObject w: this.getReachableObjects()) {
+	//			if(w instanceof Plant) {
+	//				((Plant) w).beEaten();
+	//				hungerLevel += 4;
+	//			}
+	//		}
+	//	}
 
 	public void die(ArrayList<WorldObject> allObjectList) {
 		this.setVisible(false);
-		
+
 	}
 
 	public void checkSize() {
