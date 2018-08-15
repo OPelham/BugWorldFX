@@ -30,6 +30,10 @@ import javafx.util.Duration;
 
 /**
  * SetUp is the class for drawing the user-interface and initializing the world
+ * <p>
+ * Contains two scenes, a start scene, and a simulation scene
+ * Start scene is for picking presets for the simulation to run.
+ * The Simulation scene runs the simulation and includes buttons to restart, pause, or return to the main menu.
  * 
  * @author pelhamoliv
  *
@@ -39,7 +43,7 @@ public class SetUp extends Application {
 	// fields
 	private int windowWidth = 1200;
 	private int windowHeight = 800;
-	private int numPreyBug;		//the number of this object to include in simulation
+	private int numPreyBug;				//the number of this object to include in simulation
 	private int numPredatorBug;
 	private int numOfPlant;
 	private int numOfObstacle;
@@ -191,7 +195,9 @@ public class SetUp extends Application {
 
 	}
 
-	//method to set button and text node attributes
+	/**
+	 * method to set button and text node attributes
+	 */
 	public void setNodeAttributes() {
 		introText.setFont(Font.font(70));
 		beginButton.setDefaultButton(true);		//default so enter key will act on this button
@@ -209,6 +215,9 @@ public class SetUp extends Application {
 		simulationSection.setBackground(new Background(dirtFill));	//changing background of simulation section
 	}
 
+	/**
+	 * Method to nodes to layouts
+	 */
 	public void setupLayout() {
 		//adding to startup VBOX
 		startUp.setPadding(new Insets(180));
