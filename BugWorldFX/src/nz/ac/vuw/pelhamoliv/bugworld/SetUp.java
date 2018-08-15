@@ -40,103 +40,62 @@ public class SetUp extends Application {
 	private int windowWidth = 1200;
 	private int windowHeight = 800;
 	private int numPreyBug;		//the number of this object to include in simulation
-
-
 	private int numPredatorBug;
 	private int numOfPlant;
 	private int numOfObstacle;
 	private final ArrayList<WorldObject> allObjectList = new ArrayList<>();	//collection storing all objects in simulation
 
+	//image declarations
+	private Image dirtImage = new Image("/dirtIm.jpg");
+	private BackgroundImage dirtFill = new BackgroundImage(dirtImage, BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);
+	private Image plantImage = new Image("/PlantIm.png");		//plant image
+	private ImagePattern plantFill = new ImagePattern(plantImage);
+	private Image bugImage = new Image("/PreyBug.png");			//preyBug image
+	private ImagePattern bugFill = new ImagePattern(bugImage);
+	private Image predatorBugImage = new Image("/PredatorBugIm.png");			//predatorBug image
+	private ImagePattern predatorBugFill = new ImagePattern(predatorBugImage);
+	private Image obstaceImage = new Image("/RockIm.png");			//obstacle image
+	private ImagePattern obstacleFill = new ImagePattern(obstaceImage);
+
+	//////Start screen declarations/////////////////
+	//node declarations
+	final Text introText = new Text("BUG WORLD FX");	//title text
+	Button beginButton = new Button("Run Simulation");	
+	Text preyBugPromptText = new Text("Number of prey bugs");
+	TextField preyBugTextField = new TextField();
+	Text predatorBugPromptText = new Text("Number of predator bugs");
+	TextField predatorBugTextField = new TextField();
+	Text plantPromptText = new Text("Number of plants");
+	TextField plantTextField = new TextField();
+	Text obstaclePromptText = new Text("Number of obstacles");
+	TextField obstacleTextField = new TextField();
+
+	//layout and scene declarations
+	//creating scene for initial screen, contains startup VBox
+	VBox startUp = new VBox(); //layout for start screen
+	Scene startUpScene = new Scene(startUp, windowWidth, windowHeight);
+
+	//////Simulation Screen declarations//////////////
+	//node declarations
+	Button pausePlayButton = new Button("Pause");					//a button to toggle play/pause
+	Button restartButton = new Button("Restart");					// restarts simulation
+	Button returnButton = new Button("Menu");					//returns to start up screen
+
+	//layout and scene declaration
+	BorderPane mainSimulationLayout = new BorderPane();		//Main layout (the parent of this scene)
+	//the following two are nested within the mainSimulationLayout
+	Pane simulationSection = new Pane();					//simulation component
+	HBox buttonSection = new HBox();						//for containing buttons
+	//scene for mainSimulationLayout
+	Scene simulationScene = new Scene(mainSimulationLayout, windowWidth, windowHeight);
+
+
+
 	//this is the main entry point for the application
 	@Override
 	public void start(Stage primaryStage) throws Exception {
-
-		//loading in images and setting as image pattern
-		Image dirtImage = new Image("/dirtIm.jpg");
-		BackgroundImage dirtFill = new BackgroundImage(dirtImage, BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);
-		Image plantImage = new Image("/PlantIm.png");		//plant image
-		ImagePattern plantFill = new ImagePattern(plantImage);
-		Image bugImage = new Image("/PreyBug.png");			//preyBug image
-		ImagePattern bugFill = new ImagePattern(bugImage);
-		Image predatorBugImage = new Image("/PredatorBugIm.png");			//predatorBug image
-		ImagePattern predatorBugFill = new ImagePattern(predatorBugImage);
-		Image obstaceImage = new Image("/RockIm.png");			//obstacle image
-		ImagePattern obstacleFill = new ImagePattern(obstaceImage);
-
-		//**the following relates to the START SCREEN** the initial screen
-		VBox startUp = new VBox(); //layout for start screen
-
-		// nodes of startUp scene
-		final Text introText = new Text("BUG WORLD FX");	//title text
-		introText.setFont(Font.font(70));
-		//used to initiate simulation screen with given objects
-		Button beginButton = new Button("Run Simulation");	
-		beginButton.setDefaultButton(true);		//default so enter key will act on this button
-		beginButton.setAlignment(Pos.CENTER);	
-		//this block relates to the input textfields which are used in populating the simulation
-		// number of prey bugs input
-		Text preyBugPromptText = new Text("Number of prey bugs");
-		TextField preyBugTextField = new TextField();
-		preyBugTextField.setText("10");
-		preyBugTextField.setMaxWidth(100);
-		// number of predator bugs input
-		Text predatorBugPromptText = new Text("Number of predator bugs");
-		TextField predatorBugTextField = new TextField();
-		predatorBugTextField.setText("2");
-		predatorBugTextField.setMaxWidth(100);
-		// number of plants input
-		Text plantPromptText = new Text("Number of plants");
-		TextField plantTextField = new TextField();
-		plantTextField.setText("8");
-		plantTextField.setMaxWidth(100);
-		// number of plants input
-		Text obstaclePromptText = new Text("Number of obstacles");
-		TextField obstacleTextField = new TextField();
-		obstacleTextField.setText("5");
-		obstacleTextField.setMaxWidth(100);
-
-		//adding to startup VBOX
-		startUp.setPadding(new Insets(180));
-		startUp.getChildren().add(introText);
-		startUp.getChildren().add(preyBugPromptText);
-		startUp.getChildren().add(preyBugTextField);
-		startUp.getChildren().add(predatorBugPromptText);
-		startUp.getChildren().add(predatorBugTextField);
-		startUp.getChildren().add(plantPromptText);
-		startUp.getChildren().add(plantTextField);
-		startUp.getChildren().add(obstaclePromptText);
-		startUp.getChildren().add(obstacleTextField);
-		startUp.getChildren().add(beginButton);
-		startUp.setSpacing(10);
-		startUp.setAlignment(Pos.TOP_CENTER);
-
-		//creating scene for initial screen, contains startup VBox
-		Scene startUpScene = new Scene(startUp, windowWidth, windowHeight);		
-
-		//**the following relates to the SIMULATION SCREEN**
-		BorderPane mainSimulationLayout = new BorderPane();		//Main layout (the parent of this scene)
-		//the following two are nested within the mainSimulationLayout
-		Pane simulationSection = new Pane();					//simulation component
-		HBox buttonSection = new HBox();						//for containing buttons
-
-		buttonSection.setAlignment(Pos.CENTER);					//setting position of buttons
-		Button pausePlayButton = new Button("Pause");					//a button to toggle play/pause
-		Button restartButton = new Button("Restart");					// restarts simulation
-		Button returnButton = new Button("Menu");					//returns to start up screen
-		//adding buttons to button HBox
-		buttonSection.getChildren().add(pausePlayButton);			
-		buttonSection.getChildren().add(restartButton);
-		buttonSection.getChildren().add(returnButton);
-		buttonSection.setStyle("-fx-background-color: #464646");	//sets background colour of button section
-
-		simulationSection.setBackground(new Background(dirtFill));	//changing background of simulation section
-		//assigning section of layout to main borderpane 
-		mainSimulationLayout.setCenter(simulationSection);
-		mainSimulationLayout.setTop(buttonSection);
-
-
-		//scene for mainSimulationLayout
-		Scene simulationScene = new Scene(mainSimulationLayout, windowWidth, windowHeight);
+		setNodeAttributes();
+		setupLayout();
 
 		//this section cycles through frames every 16milliseconds
 		KeyFrame frame = new KeyFrame(Duration.millis(16), new EventHandler<ActionEvent>() {
@@ -186,61 +145,6 @@ public class SetUp extends Application {
 					//				primaryStage.show();
 					timeline.play();
 				}
-
-
-
-
-				//				if(inputCheck(preyBugNumField.getText()) <0) { //if input check method returns -1 then is not valid
-				//					preyBugNumText.setText("Prey bugs: Please Enter a positive integer 0-100");
-				//					preyBugNumText.setFill(Color.RED);
-				//					valid = false;	//to stop change to next scene
-				//				} else {
-				//					preyBugNumText.setText("Number of prey bugs");
-				//					preyBugNumText.setFill(Color.BLACK);
-				//					numPreyBug = inputCheck(preyBugNumField.getText());	//add outputs to field numPreyBug for use in populate world method
-				//				}
-				//
-				//				//preator bug check
-				//				if(inputCheck(predatorBugNumField.getText()) <0) { //if input check method returns -1 then is not valid
-				//					predatorBugNumText.setText("Predator bugs: Please Enter a positive integer 0-100");
-				//					predatorBugNumText.setFill(Color.RED);
-				//					valid = false;	//to stop change to next scene
-				//				} else {
-				//					predatorBugNumText.setText("Number of predator bugs");
-				//					predatorBugNumText.setFill(Color.BLACK);
-				//					numPredatorBug = inputCheck(predatorBugNumField.getText());	//add outputs to field numPreyBug for use in populate world method
-				//				}
-				//
-				//				//plant check
-				//				if(inputCheck(plantNumField.getText()) <0) { //if input check method returns -1 then is not valid
-				//					plantNumText.setText("Plants: Please Enter a positive integer 0-100");
-				//					plantNumText.setFill(Color.RED);
-				//					valid = false;	//to stop change to next scene
-				//				} else {
-				//					plantNumText.setText("Number of plants");
-				//					plantNumText.setFill(Color.BLACK);
-				//					numOfPlant = inputCheck(plantNumField.getText());	//add outputs to field numPreyBug for use in populate world method
-				//				}
-				//
-				//				//obstacle check
-				//				if(inputCheck(obstacleNumField.getText()) <0) { //if input check method returns -1 then is not valid
-				//					obstacleNumText.setText("Obstacles: Please Enter a positive integer 0-100");
-				//					obstacleNumText.setFill(Color.RED);
-				//					valid = false;	//to stop change to next scene
-				//				} else {
-				//					obstacleNumText.setText("Number of obstacles");
-				//					obstacleNumText.setFill(Color.BLACK);
-				//					numOfObstacle = inputCheck(obstacleNumField.getText());	//add outputs to field numPreyBug for use in populate world method
-				//				}
-				//
-				//				//change to correct scene for simulation if all input valid
-				//				if (valid == true) {
-				//					primaryStage.setScene(simulationScene);			//changeing stage to display/run simulation screen
-				//					populateWorld(simulationScene, simulationSection, plantFill, bugFill, obstacleFill, predatorBugFill);		//populating world
-				//					//				primaryStage.show();
-				//					timeline.play();
-				//				}
-
 			}
 		});
 
@@ -284,6 +188,51 @@ public class SetUp extends Application {
 		primaryStage.setScene(startUpScene);
 		primaryStage.show();
 
+
+	}
+
+	//method to set button and text node attributes
+	public void setNodeAttributes() {
+		introText.setFont(Font.font(70));
+		beginButton.setDefaultButton(true);		//default so enter key will act on this button
+		beginButton.setAlignment(Pos.CENTER);
+		preyBugTextField.setText("10");				
+		preyBugTextField.setMaxWidth(100);
+		predatorBugTextField.setText("2");		
+		predatorBugTextField.setMaxWidth(100);
+		plantTextField.setText("8");
+		plantTextField.setMaxWidth(100);
+		obstacleTextField.setText("5");
+		obstacleTextField.setMaxWidth(100);
+		buttonSection.setAlignment(Pos.CENTER);					//setting position of buttons
+		buttonSection.setStyle("-fx-background-color: #464646");	//sets background colour of button section
+		simulationSection.setBackground(new Background(dirtFill));	//changing background of simulation section
+	}
+
+	public void setupLayout() {
+		//adding to startup VBOX
+		startUp.setPadding(new Insets(180));
+		startUp.getChildren().add(introText);
+		startUp.getChildren().add(preyBugPromptText);
+		startUp.getChildren().add(preyBugTextField);
+		startUp.getChildren().add(predatorBugPromptText);
+		startUp.getChildren().add(predatorBugTextField);
+		startUp.getChildren().add(plantPromptText);
+		startUp.getChildren().add(plantTextField);
+		startUp.getChildren().add(obstaclePromptText);
+		startUp.getChildren().add(obstacleTextField);
+		startUp.getChildren().add(beginButton);
+		startUp.setSpacing(10);
+		startUp.setAlignment(Pos.TOP_CENTER);
+		
+		//adding buttons to button HBox from simulation scene
+		buttonSection.getChildren().add(pausePlayButton);			
+		buttonSection.getChildren().add(restartButton);
+		buttonSection.getChildren().add(returnButton);
+		
+		//assigning section of layout to main borderpane 
+		mainSimulationLayout.setCenter(simulationSection);
+		mainSimulationLayout.setTop(buttonSection);
 	}
 
 
