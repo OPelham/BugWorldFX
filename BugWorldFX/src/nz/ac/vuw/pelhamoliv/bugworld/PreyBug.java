@@ -65,7 +65,7 @@ public class PreyBug extends Bug{
 
 	public void eat(ArrayList<WorldObject> allObjectList) {		//if within-reach-collection contains food eat it
 		checkReach(allObjectList);
-		for (WorldObject w: this.getReachableObjects()) {
+		for (WorldObject w: this.getReachableObjectsList()) {
 			if(w instanceof Plant) {
 				((Plant) w).beEaten();	//make plant be eaten too
 				setHungerLevel(getHungerLevel()+4);		//reduce hunger

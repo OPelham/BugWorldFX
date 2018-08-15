@@ -49,7 +49,7 @@ public class PredatorBug extends Bug{
 	//overrides bug method
 	public void eat(ArrayList<WorldObject> allObjectList) {		//if within-reach-collection contains food eat it
 		checkReach(allObjectList);
-		for (WorldObject w: this.getReachableObjects()) {
+		for (WorldObject w: this.getReachableObjectsList()) {
 			if(w instanceof PreyBug) {
 				((PreyBug) w).beEaten();
 				setHungerLevel(getHungerLevel()+4);

@@ -10,7 +10,7 @@ import javafx.scene.Scene;
 public class Obstacle extends WorldObject{
 	//constructor
 	public Obstacle(Scene scene) {
-		super(Math.random()*50+10, scene);	//set radius
+		super((Math.random()* 50 + 10), scene);	//set radius
 
 	}
 

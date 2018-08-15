@@ -21,6 +21,7 @@ public abstract class Bug extends WorldObject {
 	private float dx = -3.5f; 		//how far to move in x plane 
 	private float dy = -3.5f;		//how far to move in y plane 
 	private List<WorldObject> sensedObjects = new ArrayList<WorldObject>(); //collection of all objects within sense range that are alive
+	private List<WorldObject> reachableObjectsList = new ArrayList<WorldObject>(); //any objects in range
 
 	//constructor
 	public Bug(Scene scene) {
@@ -174,6 +175,34 @@ public abstract class Bug extends WorldObject {
 
 	}
 
+	//could make the following two methods into one method
+
+	//establishes weather a collision has occurred given potential move coordinates
+	//put in this class for the potential of checking for validity of position during initial spawn
+	//ie all classes will need to check
+	public boolean conductCollision(double potnX, double potnY, WorldObject o) {
+		double deltaX = o.getCenterX() + o.getTranslateX() - potnX;	//calculates difference on x plane of the two objects
+		double deltaY = o.getCenterY() + o.getTranslateY() - potnY; //calculates difference on x plane of the two objects
+		//now see if distance between 2 is less than the two radii ie there is a collision
+		double distance = Math.sqrt((deltaX * deltaX) + (deltaY * deltaY)); //the straight line distance between two object centers
+		double minDistance = o.getRadius() + this.getRadius(); //smallest valid distance between these objects is the sum of their respective radii
+		return(distance < minDistance);		//return true if a collision
+	}
+
+	//goes through all other world objects in world and sees if this object will collide with each
+	//returns true if collides with first checked
+	//need to find way of sorting by distance
+	public boolean checkCollisions(double potnX, double potnY, ArrayList<WorldObject> allObjectList) {
+		for (WorldObject d: allObjectList) {
+			if(this!=d && d.isVisible()) {	//not dead
+				if(this.conductCollision(potnX, potnY, d)) { //see if this object collides with 
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+
 	//finds all objects with in senserange
 	//and decides which type of movement is required?
 	public void senseArea(ArrayList<WorldObject> allObjectList) { 
@@ -198,6 +227,26 @@ public abstract class Bug extends WorldObject {
 		double minDistance =  this.getSenseRange() + d.getRadius() + this.getRadius() ;
 		if(distance < minDistance) {
 			sensedObjects.add(d);
+		}
+	}
+
+	//checks within interactable area for interactable objects eg for eating
+	//this range is 2 wider than objects radius
+	public void checkReach(ArrayList<WorldObject> allObjectList) {
+		reachableObjectsList.clear();	//clears those in range from last move
+		for(WorldObject d: allObjectList) {
+			if(d.isVisible()) {	//not dead
+				//use pythagoras to establish if within range
+				double deltaX = (this.getTranslateX()) - (d.getTranslateX()) ;	//gets x component of distance
+				double deltaY = (this.getTranslateY()) - (d.getTranslateY());	//gets y component of distance
+				//now use pythagoras to see actual distance
+				double distance = (Math.sqrt ((deltaX * deltaX) + (deltaY * deltaY)) ) - this.getRadius() - d.getRadius();
+				//now see if distance between 2 is less than the two radii + sense range
+				double minDistance =  d.getRadius() + this.getRadius() ;
+				if(distance < minDistance) {
+					reachableObjectsList.add(d);	//if true add to reachable object collection
+				}
+			}
 		}
 	}
 
@@ -295,6 +344,10 @@ public abstract class Bug extends WorldObject {
 		this.setRadius(hungerLevel+10);
 	}
 
+	//accessor methods
+	public List<WorldObject> getReachableObjectsList() {
+		return reachableObjectsList;
+	}
 
 
 }
