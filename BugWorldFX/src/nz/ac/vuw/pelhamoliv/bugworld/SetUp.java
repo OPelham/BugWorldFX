@@ -174,7 +174,7 @@ public class SetUp extends Application {
 				int plantCheck = giveFeedback(plantTextField, plantPromptText, "Plants: Please Enter a positive integer 0-100", "Number of plants");
 				int obstacleCheck = giveFeedback(obstacleTextField, obstaclePromptText, "Obstacles: Please Enter a positive integer 0-100", "Number of obstacles");
 				// all text field are valid go to next scene, else will remain for corrected input
-				if(preyBugCheck >0 && predatorBugCheck >0 && plantCheck >0 && obstacleCheck >0) {
+				if(preyBugCheck >=0 && predatorBugCheck >=0 && plantCheck >=0 && obstacleCheck >=0) {
 					//if all true then change to next scene and populate world
 					setNumPreyBug(preyBugCheck);
 					setNumPredatorBug(predatorBugCheck);

@@ -236,7 +236,7 @@ public abstract class Bug extends WorldObject {
 	//		return false;
 	//	}
 
-	//SHould try more than just altering direction?
+	//moves direction toward target
 	public void moveToward(WorldObject w, ArrayList<WorldObject> allObjectList) {
 		//get position and move toward object
 		//		this.setFill(Color.RED);	//debugging
