@@ -28,8 +28,7 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
-/**
- * SetUp is the class for drawing the user-interface and initializing the world
+/** SetUp is the class for drawing the user-interface and initializing the world
  * <p>
  * Contains two scenes, a start scene, and a simulation scene
  * Start scene is for picking presets for the simulation to run.
@@ -38,7 +37,7 @@ import javafx.util.Duration;
  * @author pelhamoliv
  *
  */
-public class SetUp extends Application {
+public class BugWorldFX extends Application {
 
 	// fields
 	private int windowWidth = 1200;
@@ -94,7 +93,10 @@ public class SetUp extends Application {
 	Scene simulationScene = new Scene(mainSimulationLayout, windowWidth, windowHeight);
 
 
-
+	/**
+	 * Start runs a KeyFrame for animation to update the simulation world.
+	 * It also sets up the UI and button EventHandlers
+	 */
 	//this is the main entry point for the application
 	@Override
 	public void start(Stage primaryStage) throws Exception {
@@ -245,9 +247,11 @@ public class SetUp extends Application {
 	}
 
 
-	//This method Populates the world with objects, 
-	//takes the stage to make bug which takes this as a parameter in order to know boundaries
-	//takes the pane to clear old contents upon restart button action
+	/**
+	 * This method Populates the world with objects, 
+	 * takes the stage to make bug which takes this as a parameter in order to know boundaries
+	 * takes the pane to clear old contents upon restart button action
+	 */
 	public void populateWorld(Scene simulationScene, Pane simulationSection, ImagePattern plantFill, ImagePattern bugFill, ImagePattern obstacleFill, ImagePattern predatorBugFill) {
 
 		allObjectList.clear();			//clears here so that upon reset past list in not carried over
@@ -282,8 +286,12 @@ public class SetUp extends Application {
 			simulationSection.getChildren().add(bugToAdd);			//adds node so will be displayed
 		}
 	}
-
-	//checks that user has inputted an integer if not returns -1
+	/** checks that user has inputted an integer if not returns -1
+	 * 
+	 * 
+	 * @param toCheck, is a string input taken from textfield in start scene
+	 * @return return the corrosponding int value if this is valid, otherwise returns -1
+	 */
 	public int inputCheck(String toCheck) {
 		int i = -1;
 		try  
@@ -311,8 +319,14 @@ public class SetUp extends Application {
 	//		}
 	//	}
 
-
-	//sets error mesages if invald input in textfield, calls input check to test for validity
+	/**
+	 * sets error mesages if invald input in textfield, calls input check to test for validity
+	 * @param fieldname, the TextField checked
+	 * @param textname, the feed back Text node to alter presenting feedback
+	 * @param errorMessage, the String to display if input was not valid
+	 * @param defaultMessage, the String to display if input was valid
+	 * @return returns the valid int inputted by the user
+	 */
 	public int giveFeedback(TextField fieldname, Text textname, String errorMessage, String defaultMessage) {
 		if(inputCheck(fieldname.getText()) <0) { //if input check method returns -1 then is not valid
 			textname.setText(errorMessage);

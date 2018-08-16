@@ -4,8 +4,7 @@ import javafx.scene.shape.Circle;
 import javafx.scene.Scene;
 
 /**WorldObject class is the parent class for all objects used in the simulation
- * it includes - collision methods
- * 			   - checkReach (eat or be eaten)
+ * it includes constructor to set radius and to randomise location based on scene size
  * 
  * @author pelhamoliv
  *

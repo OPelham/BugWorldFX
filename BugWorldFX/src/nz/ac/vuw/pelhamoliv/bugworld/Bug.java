@@ -4,9 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 import javafx.scene.Scene;
 
-/**Bug is the superclass of preybug and predator bug
+/**Bug is the abstract superclass of preybug and predator bug
  * holds all common methods of these two
- * Is abstract
+ * 
  * 
  * @author pelhamoliv
  *
@@ -20,10 +20,16 @@ public abstract class Bug extends WorldObject {
 	private int hungerLevel;		//current level of hunger (used to determine if need food and if dies)
 	private float dx = -3.5f; 		//how far to move in x plane 
 	private float dy = -3.5f;		//how far to move in y plane 
+	/**
+	 * collections of objects close enough to sense and to reach
+	 */
 	private List<WorldObject> sensedObjects = new ArrayList<WorldObject>(); //collection of all objects within sense range that are alive
 	private List<WorldObject> reachableObjectsList = new ArrayList<WorldObject>(); //any objects in range
 
-	//constructor
+	/**Constructor sets radius, max speed, hunger level, sense range, and initial direction
+	 * 
+	 * @param scene, the simulation scene
+	 */
 	public Bug(Scene scene) {
 		super(10, scene);	//sets Radius calling parent contructor
 		this.maxSpeed = 4.0f;
@@ -89,7 +95,12 @@ public abstract class Bug extends WorldObject {
 
 	//Methods
 
-	//updatmethod
+	/**called every frame updates the bug  
+	 * <p>
+	 * updates bugs position, hungerlevel, and its collection of sensed as well as reachable objects
+	 * 
+	 * @param allObjectList, the collection of all world objects in simulation
+	 */
 	public void update(ArrayList<WorldObject> allObjectList) {
 		makeHungry();	//first change hunger level
 		senseArea(allObjectList);	//fill array of objects within sensory range
@@ -109,7 +120,14 @@ public abstract class Bug extends WorldObject {
 		}
 	}
 
-	//a class to move bug randomly (direction and speed)
+	/**
+	 * a class to move bug randomly 
+	 * <p>
+	 * Each called there is a chance of changing direction and speed
+	 * This method is called once per update
+	 * 
+	 * @param allObjectList, the collection of all WorldObjects currently in the simulation
+	 */
 	public void moveRandomly(ArrayList<WorldObject> allObjectList) {
 		//		this.setFill(Color.BLACK);	//debugging
 		double randx = Math.random()*40;	//for use in calculating odds of direction change
@@ -141,6 +159,14 @@ public abstract class Bug extends WorldObject {
 
 	}
 
+	/**
+	 * Moves the bug if move is valid
+	 * <p>
+	 * moveBug takes a potential new x and y position and calls checkCollisions to establish if the move is valid
+	 * If the move is valid the bug will be translated to this location
+	 * 
+	 * @param allObjectList - the collection of all WorldObjects in the simulation
+	 */
 	public void moveBug(ArrayList<WorldObject> allObjectList) {
 		//movement
 		//first check if collision on move if none move
@@ -152,7 +178,9 @@ public abstract class Bug extends WorldObject {
 		}
 	}
 
-	//a method to check if the bug is within bounds of scene 
+	/**
+	 * Checks the Bugs current location if it is out side of bounds will move the bug to the closest available valid location
+	 */
 	public void checkInBounds() {
 		//four checks of >= border (dont forget radius) l/r/t/b then move to be inside
 		//if outside rhs bound move to closest x pos which is valid
@@ -177,9 +205,17 @@ public abstract class Bug extends WorldObject {
 
 	//could make the following two methods into one method
 
-	//establishes weather a collision has occurred given potential move coordinates
-	//put in this class for the potential of checking for validity of position during initial spawn
-	//ie all classes will need to check
+	/**
+	 * Checks a potential location to see if moving here would result in a collision
+	 * <p>
+	 * checks distance from this Bug to the object we are checking 
+	 * if this is less then the sum of the radii of both objects then a collision 
+	 * is registered and method returns 'true'
+	 * @param potnX - the potential x location to move to
+	 * @param potnY - the potential y location to move to
+	 * @param o - the WorldObject to check
+	 * @return	- returns 'true' if collision would result, or false if not
+	 */
 	public boolean conductCollision(double potnX, double potnY, WorldObject o) {
 		double deltaX = o.getCenterX() + o.getTranslateX() - potnX;	//calculates difference on x plane of the two objects
 		double deltaY = o.getCenterY() + o.getTranslateY() - potnY; //calculates difference on x plane of the two objects
@@ -189,9 +225,15 @@ public abstract class Bug extends WorldObject {
 		return(distance < minDistance);		//return true if a collision
 	}
 
-	//goes through all other world objects in world and sees if this object will collide with each
-	//returns true if collides with first checked
-	//need to find way of sorting by distance
+	/**
+	 * Calls conduct collision on all WorldObjects in the simulation
+	 * <p>
+	 * returns true after first collision by calling {@link #conductCollision(double potnX, double potnY, WorldObject o)} if detected, if no collision are detected then returns false
+	 * @param potnX - the potential x location to move to
+	 * @param potnY - the potential y location to move to
+	 * @param allObjectList - the collection of all WorldObjects in the simulation
+	 * @return - returns true if a collision is detected or false if no collision results
+	 */
 	public boolean checkCollisions(double potnX, double potnY, ArrayList<WorldObject> allObjectList) {
 		for (WorldObject d: allObjectList) {
 			if(this!=d && d.isVisible()) {	//not dead
